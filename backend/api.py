@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -57,13 +58,34 @@ async def get_events():
     return JSONResponse(content={"events": events})
 
 
-@app.put("/api/events/{event_id}")
-async def update_event(event_id: int):
-    return JSONResponse(content={"message": f"Event {event_id} updated successfully."})
+class Event(BaseModel):
+    title: str
+    date: str
+    time: str
+    location: str
+    author: str
 
 
-@app.put("/api/events/{event_id}/rsvp")
-async def rsvp_event(event_id: int):
+@app.post("/api/events")
+async def create_event(event: Event):
+    event_id = 0
     return JSONResponse(
-        content={"message": f"RSVP for event {event_id} recorded successfully."}
+        content={
+            "message": f"Event '{event.title}' created successfully with id `{event_id}`."
+        }
+    )
+
+
+class RSVP(BaseModel):
+    author: str
+    movie: str
+
+
+@app.post("/api/{event_id}/rsvp")
+async def rsvp_event(event_id: int):
+    rsvp_id = 0
+    return JSONResponse(
+        content={
+            "message": f"RSVP for event {event_id} recorded successfully at id `{rsvp_id}`."
+        }
     )
