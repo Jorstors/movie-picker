@@ -3,11 +3,11 @@
 import EventFetch from "@/lib/Events";
 
 import TabBar from "@/components/TabBar";
-import AddEdit from "@/components/AddEdit";
+import AddEdit from "@/components/AddEditEvents";
 import EventDialogue from "@/components/EventDialogue";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+function Home() {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -64,3 +64,5 @@ export default function Home() {
     </main>
   );
 }
+
+export default Home;
