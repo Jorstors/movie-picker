@@ -52,16 +52,15 @@ function SpinDialogue() {
           <LoaderPinwheelIcon className="size-10" />
         </Button>
       </DialogTrigger>
-      <DialogContent >
+      <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit">
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>
         <SpinWheel
           segments={segments}
           onSpinComplete={handleSpinComplete}
-          size={300}
+          size={700}
           showSpinButton={false}
-          className="w-full"
         />
       </DialogContent>
     </Dialog>
