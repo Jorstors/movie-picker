@@ -55,3 +55,15 @@ async def get_events():
         },
     ]
     return JSONResponse(content={"events": events})
+
+
+@app.put("/api/events/{event_id}")
+async def update_event(event_id: int):
+    return JSONResponse(content={"message": f"Event {event_id} updated successfully."})
+
+
+@app.put("/api/events/{event_id}/rsvp")
+async def rsvp_event(event_id: int):
+    return JSONResponse(
+        content={"message": f"RSVP for event {event_id} recorded successfully."}
+    )
