@@ -37,5 +37,21 @@ async def get_events():
             "location": "Location C",
             "author": "Author 3",
         },
+        {
+            "id": 4,
+            "title": "Event 4",
+            "date": "2024-07-04",
+            "time": "09:00 AM",
+            "location": "Location D",
+            "author": "Author 4",
+        },
+        {
+            "id": 5,
+            "title": "Event 5",
+            "date": "2024-07-05",
+            "time": "11:00 AM",
+            "location": "Location E",
+            "author": "Author 5",
+        },
     ]
     return JSONResponse(content={"events": events})

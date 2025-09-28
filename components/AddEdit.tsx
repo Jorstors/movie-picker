@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { TicketPlus, TicketMinus } from "lucide-react";
 function AddEdit() {
   return (
-    <div className="w-full h-15 flex gap-4 items-center content-center bg-sky-200">
+    <div className="w-full h-15 flex gap-4 items-center content-center">
       <Button variant="outline" size="lg" className="hover:cursor-pointer">
         <TicketPlus /> Add Event
       </Button>

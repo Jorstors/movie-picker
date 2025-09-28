@@ -30,8 +30,8 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen w-full grid place-items-center bg-amber-600" >
-      <div className="px-5 min-w-xs md:w-3xl lg:w-5xl min-h-screen flex flex-col gap-4 items-center content-start pt-20 bg-sky-600">
+    <main className="min-h-screen w-full grid place-items-center" >
+      <div className="px-5 min-w-xs md:w-3xl lg:w-5xl min-h-screen flex flex-col gap-10 items-center content-start py-20">
         {/* Tab Bar */}
         <div>
           <TabBar />
