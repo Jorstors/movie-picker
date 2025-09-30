@@ -1,5 +1,5 @@
-from SQL_UTIL.db import POOL
-from SQL_UTIL.operations import create_events_table, create_rsvps_table
+from .db import POOL
+from .operations import create_events_table, create_rsvps_table
 
 
 def init_db():

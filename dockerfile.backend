@@ -9,4 +9,7 @@ RUN pip install -r requirements.txt
 COPY . .
 EXPOSE 8000
 
-CMD ["sh", "-c", "python backend/SQL_UTIL/init_db.py && uvicorn backend.api:app --host 0.0.0.0 --port 8000"]
+# Commenting this out to put it in the compose file instead possibly
+# RUN ["python", "-m", "backend.SQL_UTIL.init_db"]
+
+CMD ["uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]

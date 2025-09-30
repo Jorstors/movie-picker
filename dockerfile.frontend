@@ -8,6 +8,7 @@ RUN npm install
 
 # Copy everything except node_modules (.dockerignore)
 COPY . .
-EXPOSE 3000
+RUN npm run build
 
 CMD ["npm", "start"]
+EXPOSE 3000
