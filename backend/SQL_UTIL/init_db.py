@@ -1,4 +1,4 @@
-from SQL_UTIL.init_db import POOL
+from SQL_UTIL.db import POOL
 from SQL_UTIL.operations import create_events_table, create_rsvps_table
 
 
