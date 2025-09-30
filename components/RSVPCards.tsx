@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { RSVPContext } from "./EventDialogue";
+import { RSVPContext } from "./RSVPContext";
 
 function RSVPCards() {
-  const { RSVPs, setRSVPs } = useContext(RSVPContext);
+  const { RSVPs } = useContext(RSVPContext)!;
 
   return (
     <div className="w-full min-h-full py-5 flex flex-col gap-2 items-center content-center">

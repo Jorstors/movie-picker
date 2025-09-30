@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import SpinDialogue from "./SpinDialogue";
 import AddEditMovies from "./AddEditMovies";
 import RSVPCards from "./RSVPCards";
-import { createContext, useState } from "react";
+import { RSVPProvider } from "./RSVPContext";
 
 type EventDialogueProps = {
   title: string;
@@ -19,31 +19,9 @@ type EventDialogueProps = {
   location: string;
   author: string;
 }
-type RSVPContextValue = {
-  RSVPs: [],
-  setRSVPs: () => void
-}
 
-// Context for RSVPs (Movie + Author Cards)
-// ... will be fetched from the backend API
-const RSVPContext = createContext<RSVPContextValue | undefined>(undefined);
 
 function EventDialogue({ title, date, time, location, author }: EventDialogueProps) {
-
-  const segments = [
-    { id: "1", text: "Inception", author: "Alice" },
-    { id: "2", text: "The Matrix", author: "Bob" },
-    { id: "3", text: "Interstellar", author: "Charlie" },
-    { id: "4", text: "The Dark Knight", author: "Diana" },
-    { id: "5", text: "Pulp Fiction", author: "Eve" },
-    { id: "6", text: "Forrest Gump", author: "Frank" },
-    { id: "7", text: "The Shawshank Redemption", author: "Grace" },
-    { id: "8", text: "The Godfather", author: "Hank" },
-    { id: "9", text: "Fight Club", author: "Ivy" },
-    { id: "10", text: "The Lord of the Rings", author: "Jack" },
-  ]
-
-  const [RSVPs, setRSVPs] = useState(segments);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -58,7 +36,7 @@ function EventDialogue({ title, date, time, location, author }: EventDialoguePro
   }
 
   return (
-    <RSVPContext.Provider value={{ RSVPs, setRSVPs }}>
+    <RSVPProvider>
       <Dialog>
         <DialogTrigger>
           <div className="relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-40 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
@@ -83,9 +61,8 @@ function EventDialogue({ title, date, time, location, author }: EventDialoguePro
           </div>
         </DialogContent>
       </Dialog>
-    </RSVPContext.Provider>
+    </RSVPProvider>
   )
 }
 
 export default EventDialogue;
-export { RSVPContext };

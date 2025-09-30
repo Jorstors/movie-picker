@@ -7,6 +7,15 @@ import AddEdit from "@/components/AddEditEvents";
 import EventDialogue from "@/components/EventDialogue";
 import { useEffect, useState } from "react";
 
+type Event = {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  author: string;
+}
+
 function Home() {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
@@ -49,7 +58,7 @@ function Home() {
           events.length === 0 ? (
             <p>No events found.</p>
           ) : (
-            events.map((event: any) => (
+            events.map((event: Event) => (
               <EventDialogue
                 key={event.id}
                 title={event.title}
