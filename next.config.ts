@@ -1,9 +1,14 @@
 import type { NextConfig } from "next";
 
-const apiUrl = process.env.MOVIE_PICKER_API_URL || "http://backend:8000";
+// Default to localhost for local development
+let apiUrl = "http://localhost:8000";
 
-if (!apiUrl) {
-  throw new Error("MOVIE_PICKER_API_URL environment variable is not set");
+// Use environment variable for production
+if (!process.env.LOCAL_DEV) {
+  apiUrl = process.env.MOVIE_PICKER_API_URL || "http://backend:8000";
+  console.log("Using production API URL");
+} else {
+  console.log("Using local development API URL");
 }
 
 const nextConfig: NextConfig = {
