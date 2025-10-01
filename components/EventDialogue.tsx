@@ -11,17 +11,12 @@ import SpinDialogue from "./SpinDialogue";
 import AddEditMovies from "./AddEditMovies";
 import RSVPCards from "./RSVPCards";
 import { RSVPProvider } from "./RSVPContext";
-
-type EventDialogueProps = {
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  author: string;
-}
+import type { Event } from "@/app/page";
 
 
-function EventDialogue({ title, date, time, location, author }: EventDialogueProps) {
+function EventDialogue({ id, title, date, time, location, author }: Event) {
+
+  console.log("Rendering EventDialogue for event ID:", id);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

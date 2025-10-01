@@ -1,16 +1,5 @@
 import { createContext, useState, ReactNode } from "react";
-
-type RSVP = {
-  id: string;
-  text: string;
-  author?: string;
-  color?: string; // Optional color property for spin wheel segments
-}
-
-type RSVPContextValue = {
-  RSVPs: RSVP[],
-  setRSVPs: React.Dispatch<React.SetStateAction<RSVP[]>>
-}
+import type { RSVP, RSVPContextValue } from "@/lib/types";
 
 // Context for RSVPs (Movie + Author Cards)
 // ... will be fetched from the backend API

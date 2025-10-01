@@ -11,7 +11,7 @@ import { SpinWheel } from "react-prize-wheel";
 import { Button } from "./ui/button";
 import { useContext } from "react";
 import { RSVPContext } from "./RSVPContext";
-import type { RSVP } from "./RSVPContext";
+import type { WheelSegment } from "react-prize-wheel";
 import { LoaderPinwheelIcon } from "lucide-react";
 
 
@@ -20,9 +20,9 @@ function SpinDialogue() {
   const { RSVPs } = useContext(RSVPContext)!;
 
   // Fill out segments with RSVP list
-  let segments: RSVP[] = [];
+  let segments: WheelSegment[] = [];
   if (RSVPs) {
-    RSVPs.forEach((rsvp, index) => {
+    RSVPs.forEach((rsvp) => {
       // Assign a color based on index (hex colors)
       const randomColor = Math.floor(Math.random() * 16777215);
       let hexColor = randomColor.toString(16);
@@ -34,7 +34,8 @@ function SpinDialogue() {
     });
   }
 
-  if (segments.length === 0) {
+  // If no RSVPs, show placeholder segments
+  if (!segments) {
     segments = [
       { id: '1', text: 'No RSVPs Yet', color: '#d3d3d3' },
       { id: '2', text: 'No RSVPs Yet', color: '#a9a9a9' },

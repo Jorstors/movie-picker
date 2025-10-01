@@ -6,15 +6,8 @@ import TabBar from "@/components/TabBar";
 import AddEdit from "@/components/AddEditEvents";
 import EventDialogue from "@/components/EventDialogue";
 import { useEffect, useState } from "react";
+import type { Event } from "@/lib/types";
 
-type Event = {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  author: string;
-}
 
 function Home() {
   const [events, setEvents] = useState([])
@@ -61,6 +54,7 @@ function Home() {
             events.map((event: Event) => (
               <EventDialogue
                 key={event.id}
+                id={event.id}
                 title={event.title}
                 date={event.date}
                 time={event.time}
@@ -75,3 +69,4 @@ function Home() {
 }
 
 export default Home;
+export type { Event };
