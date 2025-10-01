@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
-const apiUrl = process.env.MOVIES_API_URL || "http://localhost:8000/api";
+const apiUrl = process.env.MOVIE_PICKER_API_URL || "http://backend:8000";
+
+if (!apiUrl) {
+  throw new Error("MOVIE_PICKER_API_URL environment variable is not set");
+}
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -8,12 +12,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/health",
-        destination: `${apiUrl}/health`
-      },
-      {
-        source: "/api/events",
-        destination: `${apiUrl}/events`
+        source: "/api/:path*",
+        destination: `${apiUrl}/api/:path*` // Proxy to Backend
       }
     ]
   }

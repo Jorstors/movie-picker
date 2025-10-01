@@ -1,0 +1,62 @@
+# Docker compose file to set up front end, back end, and Postgres database
+# Run with: docker-compose -f dockercompose.yml up -d
+# ENV variables are as follows:
+# MOVIE_PICKER_API_URL: Backend API URL
+# MOVIE_PICKER_DB_URL: Postgres database URL
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: moviepicker
+      POSTGRES_PASSWORD: moviepickerpass
+      POSTGRES_DB: moviepicker
+    volumes:
+      - moviepicker_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U moviepicker -d moviepicker -h localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Service to initialize the database schema
+  initialize:
+    image: jorstors/movie-picker-be:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      MOVIE_PICKER_DB_URL: postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker
+    command: ["python", "-m", "backend.SQL_UTIL.init_db"]
+    restart: "no"
+
+  backend:
+    image: jorstors/movie-picker-be:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      initialize:
+        condition: service_completed_successfully
+    environment:
+      MOVIE_PICKER_DB_URL: postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker
+      MOVIE_PICKER_API_URL: http://backend:8000
+    expose:
+      - "8000"
+
+  frontend:
+    image: jorstors/movie-picker-fe:latest
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      MOVIE_PICKER_API_URL: http://backend:8000
+    # Port forwarding to host machine for access
+    ports:
+      - "3000:3000"
+
+volumes:
+  moviepicker_pgdata:
