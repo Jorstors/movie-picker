@@ -73,7 +73,7 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
         </DialogHeader>
         <div className="min-w-xs w-[50vw] h-[70vh] rounded-lg p-5 mx-auto flex flex-col items-center gap-5">
           <Badge variant="outline" className="w-full sm:text-lg text-center  ">
-            {`${date} : ${time}`}
+            {`${date} : ${formatTime(time)}`}
           </Badge>
           <SpinDialogue
             RSVPs={RSVPs}
