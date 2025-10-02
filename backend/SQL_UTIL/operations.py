@@ -46,3 +46,13 @@ FROM rsvps
 WHERE event_id = %s
 ORDER BY id DESC
 """
+
+delete_event = """
+DELETE FROM events
+WHERE id = %s
+"""
+
+delete_rsvp = """
+DELETE FROM rsvps
+WHERE id = %s
+"""
