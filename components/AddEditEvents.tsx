@@ -154,10 +154,6 @@ function AddEdit() {
           <DialogDescription className="text-transparent">Add Event</DialogDescription>
         </DialogContent>
       </Dialog>
-
-      <Button variant="outline" size="lg" className="hover:cursor-pointer">
-        <TicketMinus /> Remove Event
-      </Button>
     </div >
   )
 };
