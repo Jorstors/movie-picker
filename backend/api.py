@@ -32,6 +32,7 @@ async def get_events():
         {
             "id": 1,
             "title": "Event 1",
+            "genre": "Genre 1",
             "date": "2024-07-01",
             "time": "10:00 AM",
             "location": "Location A",
@@ -40,6 +41,7 @@ async def get_events():
         {
             "id": 2,
             "title": "Event 2",
+            "genre": "Genre 2",
             "date": "2024-07-02",
             "time": "02:00 PM",
             "location": "Location B",
@@ -48,6 +50,7 @@ async def get_events():
         {
             "id": 3,
             "title": "Event 3",
+            "genre": "Genre 3",
             "date": "2024-07-03",
             "time": "06:00 PM",
             "location": "Location C",
@@ -56,6 +59,7 @@ async def get_events():
         {
             "id": 4,
             "title": "Event 4",
+            "genre": "Genre 4",
             "date": "2024-07-04",
             "time": "09:00 AM",
             "location": "Location D",
@@ -64,10 +68,20 @@ async def get_events():
         {
             "id": 5,
             "title": "Event 5",
+            "genre": "Genre 5",
             "date": "2024-07-05",
             "time": "11:00 AM",
             "location": "Location E",
             "author": "Author 5",
+        },
+        {
+            "id": 6,
+            "title": "Event 6",
+            "genre": "Genre 6",
+            "date": "2024-07-06",
+            "time": "03:00 PM",
+            "location": "Location F",
+            "author": "Author 6",
         },
     ]
     return JSONResponse(content={"events": events})

@@ -57,6 +57,7 @@ function Home() {
                 key={event.id}
                 id={event.id}
                 title={event.title}
+                genre={event.genre}
                 date={event.date}
                 time={event.time}
                 location={event.location}

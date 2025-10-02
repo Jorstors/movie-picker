@@ -17,7 +17,7 @@ import RSVPsFetch from "@/lib/RSVPs";
 import { useState, useEffect } from "react";
 
 
-function EventDialogue({ id, title, date, time, location, author }: Event) {
+function EventDialogue({ id, title, genre, date, time, location, author }: Event) {
 
   const [RSVPs, setRSVPs] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,7 +60,7 @@ function EventDialogue({ id, title, date, time, location, author }: Event) {
     <Dialog>
       <DialogTrigger>
         <div className="relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-40 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
-          <h1 className="text-lg font-bold">{title}</h1>
+          <h1 className="text-lg font-bold">{title}<br />{genre}</h1>
           <p className="sm:absolute top-0 right-0 m-5">{formatDate(date).length === 0 ? date : formatDate(date).join("/")} : {time}</p>
           <p className="sm:absolute bottom-0 left-0 m-5">{location}</p>
           <Badge variant="default" className="sm:absolute bottom-0 right-0 p-2 m-5 text-sm">{author}</Badge>
@@ -91,7 +91,7 @@ function EventDialogue({ id, title, date, time, location, author }: Event) {
             ))}
         </div>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   )
 }
 

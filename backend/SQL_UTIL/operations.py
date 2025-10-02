@@ -3,6 +3,7 @@ create_events_table = """
 CREATE TABLE IF NOT EXISTS events (
   id BIGSERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
+  genre VARCHAR(255),
   date TIMESTAMP NOT NULL,
   time VARCHAR(50) NOT NULL,
   location VARCHAR(255) NOT NULL,
@@ -22,7 +23,7 @@ CREATE TABLE IF NOT EXISTS rsvps (
 """
 
 insert_event = """
-INSERT INTO events (title, date, time, location, author)
+INSERT INTO events (title, genre, date, time, location, author)
 VALUES (%s, %s, %s, %s, %s) RETURNING id
 """
 
@@ -33,7 +34,7 @@ ON CONFLICT (event_id, author) DO NOTHING
 """
 
 get_events = """
-    SELECT id, title, date, time, location, author 
+    SELECT id, title, genre, date, time, location, author 
     FROM events 
     ORDER BY id DESC
     LIMIT 15
