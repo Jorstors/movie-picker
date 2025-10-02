@@ -29,4 +29,21 @@ async function EventFetch() {
   }
 }
 
+async function EventDelete(event_id: number) {
+  try {
+    const res = await fetch(`/api/events/${event_id}`, {
+      method: "DELETE"
+    })
+    if (res.ok) {
+      console.log("Event deleted successfully");
+      window.location.reload(); // Refresh to show updated events list
+    }
+  }
+  catch (error) {
+    console.error("Error deleting event:", error);
+    return;
+  }
+}
+
 export default EventFetch;
+export { EventDelete };

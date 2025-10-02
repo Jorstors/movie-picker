@@ -29,6 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { EventDelete } from "@/lib/Events";
 
 function formatTime(time: string): string {
   // Input: "14:30" -> Output: "2:30 PM"
@@ -127,6 +128,9 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
                   <Button
                     variant="destructive"
                     className="hover:cursor-pointer bg-destructive hover:bg-destructive"
+                    onClick={async () => {
+                      await EventDelete(id);
+                    }}
                   >
                     <Trash2Icon />
                     Delete
