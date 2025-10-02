@@ -1,6 +1,8 @@
 # backend/api.py
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+
+# psycopg using dict row factory
 from .SQL_UTIL.db import POOL
 from .SQL_UTIL.operations import (
     insert_event,
@@ -126,7 +128,13 @@ async def create_event(event: Event):
                     event.author,
                 ),
             )
-            event_id = cur.fetchone()[0]
+            event_id = cur.fetchone()
+            if not event_id:
+                return JSONResponse(
+                    status_code=500,
+                    content={"message": "Failed to create event."},
+                )
+            event_id = event_id["id"]
     return JSONResponse(
         content={
             "message": f"Event '{event.title}' created successfully with id `{event_id}`."

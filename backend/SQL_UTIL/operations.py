@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS rsvps (
 
 insert_event = """
 INSERT INTO events (title, genre, date, time, location, author)
-VALUES (%s, %s, %s, %s, %s) RETURNING id
+VALUES (%s, %s, %s, %s, %s, %s) RETURNING id
 """
 
 insert_rsvp = """
