@@ -48,12 +48,14 @@ function formatTime(time: string): string {
 
 function EventDialogue({ id, title, genre, date, time, location, author }: Event) {
 
+  const [open, setOpen] = useState(false);
   const [RSVPs, setRSVPs] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Fetch RSVP tables based on EventID 
   // to feed Spin Wheel and RSVP Cards
   useEffect(() => {
+    if (!open) return; // Only fetch when dialog is opened
     const fetchRSVPs = async () => {
       try {
         const rsvps_data = await RSVPsFetch(id);
@@ -68,10 +70,13 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
       }
     }
     fetchRSVPs();
-  }, [id]);
+  }, [id, open]);
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+    >
       <DialogTrigger>
         <div className="relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-40 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
           <h1 className="text-xl font-bold">{title}</h1>
