@@ -11,24 +11,23 @@ import {
 } from "@/components/ui/dialog";
 import { SpinWheel } from "react-prize-wheel";
 import { Button } from "./ui/button";
-import type { WheelSegment } from "react-prize-wheel";
+import type { SpinResult, WheelSegment } from "react-prize-wheel";
 import { LoaderPinwheelIcon } from "lucide-react";
-import { RSVP } from "@/lib/types";
 
 
-function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
+function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string, text: string }[], setSelectedGenre: React.Dispatch<React.SetStateAction<string>> }) {
 
   // Fill out segments with RSVP list
   let segments: WheelSegment[] = [];
-  if (RSVPs) {
-    RSVPs.forEach((rsvp) => {
+  if (genres) {
+    genres.forEach((rsvp) => {
       // Assign a color based on index (hex colors)
       const randomColor = Math.floor(Math.random() * 16777215);
       let hexColor = randomColor.toString(16);
       hexColor = '#' + hexColor.padStart(6, '0');
       // id, text(movie name), and color
       segments.push({
-        id: rsvp.id, text: rsvp.movie, color: hexColor
+        id: rsvp.id, text: rsvp.text, color: hexColor
       });
     });
   }
@@ -41,15 +40,18 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
     ]
   }
 
-  const handleSpinComplete = () => {
-    console.log('Spin complete!');
+  const handleSpinComplete = (result: SpinResult) => {
+    console.log('Spin complete! Result:', result);
+    const movie = result.segment.text;
+    console.log("Selected Genre: ", movie);
+    setSelectedGenre(movie);
   }
 
   return (
 
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default" className="text-lg py-10 min-w-fit w-25 hover:cursor-pointer mt-2 mb-5">
+        <Button variant="default" className="text-lg p-10 min-w-fit w-25 hover:cursor-pointer">
           <LoaderPinwheelIcon className="size-10" />
         </Button>
       </DialogTrigger>
@@ -60,14 +62,14 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
         <SpinWheel
           segments={segments}
           onSpinComplete={handleSpinComplete}
-          size={700}
+          size={200}
           showSpinButton={false}
         />
-        <DialogDescription className="text-transparent">Spin Picker For Movies</DialogDescription>
+        <DialogDescription className="text-transparent">Spin Picker For Genres</DialogDescription>
       </DialogContent>
     </Dialog>
 
   )
 }
 
-export default SpinDialogue;
+export default SpinGenreDialogue;
