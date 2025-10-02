@@ -33,7 +33,7 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
   }
 
   // If no RSVPs, show placeholder segments
-  if (!segments) {
+  if (segments.length === 0) {
     segments = [
       { id: '1', text: 'No RSVPs Yet', color: '#d3d3d3' },
       { id: '2', text: 'No RSVPs Yet', color: '#a9a9a9' },
