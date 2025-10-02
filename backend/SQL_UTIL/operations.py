@@ -47,12 +47,12 @@ WHERE event_id = %s
 ORDER BY id DESC
 """
 
-delete_event = """
+delete_event_query = """
 DELETE FROM events
 WHERE id = %s
 """
 
-delete_rsvp = """
+delete_rsvp_query = """
 DELETE FROM rsvps
 WHERE id = %s
 """

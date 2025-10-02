@@ -4,7 +4,12 @@ from fastapi.responses import JSONResponse
 
 # psycopg using dict row factory
 from .SQL_UTIL.db import POOL
-from .SQL_UTIL.operations import insert_event, get_events_query
+from .SQL_UTIL.operations import (
+    delete_event_query,
+    delete_rsvp_query,
+    insert_event,
+    get_events_query,
+)
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -64,7 +69,7 @@ async def create_event(event: Event):
     event_id = 0
     with POOL.connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(
+            _ = cur.execute(
                 insert_event,
                 (
                     event.title,
@@ -91,6 +96,17 @@ async def create_event(event: Event):
 
 @app.post("/api/rsvps")
 async def rsvp_event(RSVP: RSVP):
+    with POOL.connection() as conn:
+        with conn.cursor() as cur:
+            _ = cur.execute((delete_rsvp_query), (RSVP.event_id,))
     return JSONResponse(
         content={"message": f"RSVP for event {RSVP.event_id} created successfully."}
     )
+
+
+@app.delete("/api/events/{event_id}")
+async def delete_event(event_id: int):
+    with POOL.connection() as conn:
+        with conn.cursor() as cur:
+            _ = cur.execute(delete_event_query, (event_id,))
+    return JSONResponse(content={"message": f"Event {event_id} deleted successfully."})
