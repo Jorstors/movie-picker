@@ -40,7 +40,7 @@ async def get_events():
     events = []
     with POOL.connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(get_events_query)
+            _ = cur.execute(get_events_query)
             events = cur.fetchall()
 
     return JSONResponse(content={"events": events})

@@ -1,1 +1,2 @@
-uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+# From the root directory run the following command to start the FastAPI server with Uvicorn
+uvicorn backend.api:app --host 0.0.0.0 --port 8000 --reload
