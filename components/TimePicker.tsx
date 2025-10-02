@@ -56,7 +56,7 @@ export function TimePicker({ date, setDate, setTime }: { date: Date, setDate: Re
           defaultValue="12:00"
           className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           onChange={(e) => {
-            const time = e.target.value;
+            setTime(e.target.value)
           }}
         />
       </div>

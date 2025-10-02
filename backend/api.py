@@ -1,6 +1,10 @@
 # backend/api.py
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from SQL_UTIL.db import POOL
+from SQL_UTIL.operations import (
+    insert_event,
+)
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -109,6 +113,20 @@ async def get_rsvps(event_id: int):
 @app.post("/api/events")
 async def create_event(event: Event):
     event_id = 0
+    with POOL.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                insert_event,
+                (
+                    event.title,
+                    event.genre,
+                    event.date,
+                    event.time,
+                    event.location,
+                    event.author,
+                ),
+            )
+            event_id = cur.fetchone()[0]
     return JSONResponse(
         content={
             "message": f"Event '{event.title}' created successfully with id `{event_id}`."
