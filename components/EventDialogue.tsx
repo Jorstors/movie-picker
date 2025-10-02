@@ -17,6 +17,21 @@ import type { RSVP } from "@/lib/types";
 import RSVPsFetch from "@/lib/RSVPs";
 import { useState, useEffect } from "react";
 
+function formatTime(time: string): string {
+  // Input: "14:30" -> Output: "2:30 PM"
+  const hour = parseInt(time.split(":")[0])
+  const minute = time.split(":")[1]
+
+  if (hour === 0) {
+    return `12:${minute} AM`
+  }
+  else if (hour === 12) {
+    return `12:${minute} PM`
+  }
+
+  return hour >= 12 ? `${hour - 12}:${minute} PM` : `${hour}:${minute} AM`
+}
+
 function EventDialogue({ id, title, genre, date, time, location, author }: Event) {
 
   const [RSVPs, setRSVPs] = useState<RSVP[]>([]);
@@ -47,7 +62,7 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
         <div className="relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-40 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
           <h1 className="text-xl font-bold">{title}</h1>
           <Badge className="text-sm" variant="secondary">{genre}</Badge>
-          <p className="sm:absolute top-0 right-0 m-5">{date} : {time}</p>
+          <p className="sm:absolute top-0 right-0 m-5">{date} : {formatTime(time)}</p>
           <p className="sm:absolute bottom-0 left-0 m-5">{location}</p>
           <Badge variant="default" className="sm:absolute bottom-0 right-0 p-2 m-5 text-sm">{author}</Badge>
         </div>
