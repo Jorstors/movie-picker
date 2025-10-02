@@ -16,6 +16,19 @@ import type { Event } from "@/app/page";
 import type { RSVP } from "@/lib/types";
 import RSVPsFetch from "@/lib/RSVPs";
 import { useState, useEffect } from "react";
+import { Button } from "./ui/button";
+import { Trash2Icon } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 function formatTime(time: string): string {
   // Input: "14:30" -> Output: "2:30 PM"
@@ -91,7 +104,41 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
               />
             ))}
         </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              className="mt-auto w-fit p-5 hover:cursor-pointer mx-auto"
+            >
+              <Trash2Icon />
+              Delete
+            </Button>
+
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the event and remove all associated RSVPs.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="hover:cursor-pointer">Cancel</AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Button
+                  variant="destructive"
+                  className="hover:cursor-pointer bg-destructive hover:bg-destructive"
+                >
+                  <Trash2Icon />
+                  Delete
+                </Button>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
         <DialogDescription className="text-transparent">RSVP viewer</DialogDescription>
+
       </DialogContent>
     </Dialog >
   )

@@ -3,7 +3,7 @@ import { RSVP } from "@/lib/types";
 function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
 
   return (
-    <div className="w-full min-h-full py-5 flex flex-col gap-2 items-center content-center">
+    <div className="w-full min-h-fit py-5 flex flex-col gap-2 items-center content-center">
       {RSVPs.length > 0 ? (
         RSVPs.map((rsvp) => (
           <div
