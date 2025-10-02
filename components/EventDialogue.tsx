@@ -47,7 +47,7 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
         <div className="relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-40 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
           <h1 className="text-xl font-bold">{title}</h1>
           <Badge className="text-sm" variant="secondary">{genre}</Badge>
-          <p className="sm:absolute top-0 right-0 m-5">{date.split("-").join("/")} : {time}</p>
+          <p className="sm:absolute top-0 right-0 m-5">{date} : {time}</p>
           <p className="sm:absolute bottom-0 left-0 m-5">{location}</p>
           <Badge variant="default" className="sm:absolute bottom-0 right-0 p-2 m-5 text-sm">{author}</Badge>
         </div>

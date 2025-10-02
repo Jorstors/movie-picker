@@ -31,7 +31,7 @@ function AddEdit() {
     const month = date.getMonth() + 1;
     const day = date.getDate();
 
-    const formattedDate = `${month}-${day}-${year}`;
+    const formattedDate = `${month}/${day}/${year}`;
     setDateString(formattedDate);
     console.log("Reformatted Date to Date String: ", formattedDate);
   }, [date]);
