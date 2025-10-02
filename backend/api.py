@@ -1,8 +1,8 @@
 # backend/api.py
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from SQL_UTIL.db import POOL
-from SQL_UTIL.operations import (
+from .SQL_UTIL.db import POOL
+from .SQL_UTIL.operations import (
     insert_event,
 )
 from pydantic import BaseModel
