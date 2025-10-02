@@ -1,3 +1,4 @@
+// app/page.tsx
 "use client";
 
 import EventFetch from "@/lib/Events";
@@ -10,7 +11,7 @@ import type { Event } from "@/lib/types";
 
 
 function Home() {
-  const [events, setEvents] = useState([])
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true)
 
   // Fetch events from the database

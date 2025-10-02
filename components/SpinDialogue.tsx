@@ -1,3 +1,4 @@
+// components/SpinDialogue.tsx
 
 "use client";
 import {
@@ -9,15 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { SpinWheel } from "react-prize-wheel";
 import { Button } from "./ui/button";
-import { useContext } from "react";
-import { RSVPContext } from "./RSVPContext";
 import type { WheelSegment } from "react-prize-wheel";
 import { LoaderPinwheelIcon } from "lucide-react";
+import { RSVP } from "@/lib/types";
 
 
-function SpinDialogue() {
-  // Define the segments for the spin wheel
-  const { RSVPs } = useContext(RSVPContext)!;
+function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
 
   // Fill out segments with RSVP list
   let segments: WheelSegment[] = [];
@@ -29,7 +27,7 @@ function SpinDialogue() {
       hexColor = '#' + hexColor.padStart(6, '0');
       // id, text(movie name), and color
       segments.push({
-        id: rsvp.id, text: rsvp.text, color: hexColor
+        id: rsvp.id, text: rsvp.movie, color: hexColor
       });
     });
   }

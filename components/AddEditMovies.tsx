@@ -1,3 +1,4 @@
+// components/AddEditMovies.tsx
 import { Button } from "@/components/ui/button";
 import { UserPlus, UserRoundPen } from "lucide-react";
 function AddEditMovies() {

@@ -1,3 +1,4 @@
+# backend/SQL_UTIL/init_db.py
 from .db import POOL
 from .operations import create_events_table, create_rsvps_table
 

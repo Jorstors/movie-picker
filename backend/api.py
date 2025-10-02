@@ -1,8 +1,23 @@
+# backend/api.py
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 app = FastAPI()
+
+
+class Event(BaseModel):
+    title: str
+    date: str
+    time: str
+    location: str
+    author: str
+
+
+class RSVP(BaseModel):
+    event_id: int
+    movie: str
+    author: str
 
 
 @app.get("/api/health")
@@ -58,12 +73,22 @@ async def get_events():
     return JSONResponse(content={"events": events})
 
 
-class Event(BaseModel):
-    title: str
-    date: str
-    time: str
-    location: str
-    author: str
+@app.get("/api/rsvps/{event_id}")
+async def get_rsvps(event_id: int):
+    rsvps = [
+        {"id": "Requesting RSVPs", "movie": "For", "author": f"Event ID: {event_id}"},
+        {"id": "1", "movie": "Inception", "author": "Alice"},
+        {"id": "2", "movie": "The Matrix", "author": "Bob"},
+        {"id": "3", "movie": "Interstellar", "author": "Charlie"},
+        {"id": "4", "movie": "The Dark Knight", "author": "Diana"},
+        {"id": "5", "movie": "Pulp Fiction", "author": "Eve"},
+        {"id": "6", "movie": "Forrest Gump", "author": "Frank"},
+        {"id": "7", "movie": "The Shawshank Redemption", "author": "Grace"},
+        {"id": "8", "movie": "The Godfather", "author": "Hank"},
+        {"id": "9", "movie": "Fight Club", "author": "Ivy"},
+        {"id": "10", "movie": "The Lord of the Rings", "author": "Jack"},
+    ]
+    return JSONResponse(content={"rsvps": rsvps})
 
 
 @app.post("/api/events")
@@ -76,16 +101,8 @@ async def create_event(event: Event):
     )
 
 
-class RSVP(BaseModel):
-    author: str
-    movie: str
-
-
-@app.post("/api/{event_id}/rsvp")
-async def rsvp_event(event_id: int):
-    rsvp_id = 0
+@app.post("/api/rsvps")
+async def rsvp_event(RSVP: RSVP):
     return JSONResponse(
-        content={
-            "message": f"RSVP for event {event_id} recorded successfully at id `{rsvp_id}`."
-        }
+        content={"message": f"RSVP for event {RSVP.event_id} created successfully."}
     )

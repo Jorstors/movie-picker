@@ -1,5 +1,6 @@
+// lib/types.ts
 export type Event = {
-  id: string;
+  id: number;
   title: string;
   date: string;
   time: string;
@@ -9,13 +10,6 @@ export type Event = {
 
 export type RSVP = {
   id: string;
-  text: string;
   author: string;
-  color?: string; // Optional color property for spin wheel segments
+  movie: string;
 }
-
-export type RSVPContextValue = {
-  RSVPs: RSVP[],
-  setRSVPs: React.Dispatch<React.SetStateAction<RSVP[]>>
-}
-

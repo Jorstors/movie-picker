@@ -1,3 +1,4 @@
+// components/AddEditEvents.tsx
 import { Button } from "@/components/ui/button";
 import { TicketPlus, TicketMinus } from "lucide-react";
 function AddEdit() {
