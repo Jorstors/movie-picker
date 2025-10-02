@@ -1,1 +1,15 @@
 node_modules/
+.git
+.gitignore
+node_modules
+.next/cache
+.next/types
+.next/trace
+*.log
+.env*
+.env.local
+Dockerfile*
+docker-compose*.yml
+coverage
+dist
+
