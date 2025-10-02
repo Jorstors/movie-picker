@@ -67,7 +67,7 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
           <Badge variant="default" className="sm:absolute bottom-0 right-0 p-2 m-5 text-sm">{author}</Badge>
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-fit min-w-fit overflow-y-scroll">
+      <DialogContent className="max-w-fit min-w-fit overflow-y-scroll scrollbar-hidden">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

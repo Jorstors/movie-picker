@@ -70,7 +70,6 @@ function AddEdit() {
         }
       })
       if (response.ok) {
-        alert("Event created successfully!");
         window.location.reload(); // Refresh to show new event
       }
     }

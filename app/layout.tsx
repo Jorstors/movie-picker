@@ -24,9 +24,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning
+      className="scrollbar-hidden"
+    >
       <body suppressHydrationWarning
-        className={`max-w-screen overflow-x-hidden scrollbar-hidden ${geistSans.variable} ${geistMono.variable} antialiased w-screen min-h-screen`}
+        className={`max-w-screen overflow-x-hidden ${geistSans.variable} ${geistMono.variable} antialiased w-screen min-h-screen scrollbar-hidden`}
       >
         {children}
       </body>
