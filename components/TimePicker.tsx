@@ -38,6 +38,7 @@ export function TimePicker({ date, setDate, setTime }: { date: Date, setDate: Re
               selected={date}
               captionLayout="dropdown"
               onSelect={(date) => {
+                if (!date) return
                 setDate(date)
                 setOpen(false)
               }}
