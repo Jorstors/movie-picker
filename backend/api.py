@@ -8,6 +8,7 @@ app = FastAPI()
 
 class Event(BaseModel):
     title: str
+    genre: str
     date: str
     time: str
     location: str
