@@ -42,7 +42,7 @@ LIMIT 15
 """
 
 get_rsvps_for_event = """
-SELECT id, author, movie
+SELECT event_id, author, movie
 FROM rsvps
 WHERE event_id = %s
 ORDER BY id DESC
