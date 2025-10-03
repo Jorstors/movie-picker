@@ -5,9 +5,10 @@ from fastapi.responses import JSONResponse
 # psycopg using dict row factory
 from .SQL_UTIL.db import POOL
 from .SQL_UTIL.operations import (
+    insert_event,
+    insert_rsvp,
     delete_event_query,
     delete_rsvp_query,
-    insert_event,
     get_events_query,
 )
 from pydantic import BaseModel
@@ -25,7 +26,7 @@ class Event(BaseModel):
 
 
 class RSVP(BaseModel):
-    event_id: int
+    id: int
     movie: str
     author: str
 
@@ -86,7 +87,7 @@ async def create_event(event: Event):
                     status_code=500,
                     content={"message": "Failed to create event."},
                 )
-            event_id = event_id["id"]
+            event_id = event_id["id"] if event_id else -1
     return JSONResponse(
         content={
             "message": f"Event '{event.title}' created successfully with id `{event_id}`."
@@ -98,9 +99,13 @@ async def create_event(event: Event):
 async def rsvp_event(RSVP: RSVP):
     with POOL.connection() as conn:
         with conn.cursor() as cur:
-            _ = cur.execute((delete_rsvp_query), (RSVP.event_id,))
+            _ = cur.execute(insert_rsvp, (RSVP.id, RSVP.author, RSVP.movie))
+            res = cur.fetchone()
+            rsvp_id = res["id"] if res else -1
     return JSONResponse(
-        content={"message": f"RSVP for event {RSVP.event_id} created successfully."}
+        content={
+            "message": f"RSVP for event {RSVP.id} created successfully with id {rsvp_id}"
+        }
     )
 
 
@@ -108,5 +113,14 @@ async def rsvp_event(RSVP: RSVP):
 async def delete_event(event_id: int):
     with POOL.connection() as conn:
         with conn.cursor() as cur:
+            # change this
             _ = cur.execute(delete_event_query, (event_id,))
     return JSONResponse(content={"message": f"Event {event_id} deleted successfully."})
+
+
+@app.delete("/api/rsvps/{rsvp_id}")
+async def delete_rsvp(rsvp_id: int):
+    with POOL.connection() as conn:
+        with conn.cursor() as cur:
+            _ = cur.execute((delete_rsvp_query), (rsvp_id,))
+    return JSONResponse(content={"message": f"RSVP {rsvp_id} deleted successfully."})

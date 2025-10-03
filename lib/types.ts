@@ -1,6 +1,6 @@
 // lib/types.ts
 export type Event = {
-  id: number;
+  id?: number;
   title: string;
   genre?: string;
   date: string;

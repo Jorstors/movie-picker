@@ -1,17 +1,82 @@
 // components/AddEditMovies.tsx
 import { Button } from "@/components/ui/button";
 import { UserPlus, UserRoundPen } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { editingContext } from "./EventDialogue";
-function AddEditMovies() {
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Input } from "./ui/input";
+import { RSVPsCreate } from "@/lib/RSVPs";
+import { RSVP } from "@/lib/types";
+
+function AddEditMovies({ id }: { id?: number }) {
 
   const { editing, setEditing } = useContext(editingContext);
+  const [name, setName] = useState<string>("");
+  const [movie, setMovie] = useState<string>("");
+  const [disabled, setDisabled] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleSubmit = async () => {
+    if (!name || !movie) {
+      return;
+    }
+    setDisabled(true);
+    console.log("Submitting RSVP: ", { name, movie });
+    if (!id) {
+      console.error("Event ID is undefined. Cannot create RSVP.");
+      setDisabled(false);
+      return;
+    }
+    const rsvp: RSVP = {
+      id: id.toString(),
+      author: name,
+      movie: movie,
+    }
+    await RSVPsCreate(rsvp);
+    setDisabled(false);
+    setOpen(false);
+    window.location.reload();
+  }
 
   return (
     <div className="w-fit h-15 flex gap-4 place-items-center">
-      <Button variant="default" size="lg" className="hover:cursor-pointer">
-        <UserPlus /> RSVP
-      </Button>
+      <Popover
+        open={open}
+        onOpenChange={setOpen}
+      >
+        <PopoverTrigger asChild>
+          <Button variant="default" size="lg" className="hover:cursor-pointer">
+            <UserPlus /> RSVP
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="w-full min-h-fit p-5 flex flex-col gap-5 items-center content-center">
+            <Input
+              type="text"
+              placeholder="Name"
+              value={name}
+              disabled={disabled}
+              onChange={(e) => setName(e.target.value)}
+              className="w-40" />
+            <Input
+              type="text"
+              placeholder="Movie"
+              value={movie}
+              disabled={disabled}
+              onChange={(e) => setMovie(e.target.value)}
+              className="w-40" />
+            <Button
+              variant="default"
+              size="lg"
+              disabled={disabled}
+              className="hover:cursor-pointer"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
       <Button
         variant="outline"
         size="lg"

@@ -1,7 +1,7 @@
 // components/RSVPCards.tsx
 import { RSVP } from "@/lib/types";
 import { editingContext } from "./EventDialogue";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MinusIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,7 @@ import { RSVPsDelete } from "@/lib/RSVPs";
 function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
 
   const { editing } = useContext(editingContext);
+  const [disabled, setDisabled] = useState<boolean>(false);
 
   return (
     <div className="w-full min-h-fit py-5 flex flex-col gap-2 items-center content-center">
@@ -30,11 +31,11 @@ function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-
                   <Button
                     variant="destructive"
                     size="icon"
-                    className="hover:cursor-pointer">
+                    className="hover:cursor-pointer"
+                    disabled={disabled}>
                     <MinusIcon />
                   </Button>
                 </AlertDialogTrigger>
@@ -51,8 +52,12 @@ function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
                       <Button
                         variant="destructive"
                         className="hover:cursor-pointer bg-destructive hover:bg-destructive"
+                        disabled={disabled}
                         onClick={async () => {
+                          setDisabled(true);
+                          console.log(`Deleting RSVP with id: ${rsvp.id}`);
                           await RSVPsDelete(parseInt(rsvp.id));
+                          window.location.reload();
                         }}
                       >
                         <Trash2Icon />

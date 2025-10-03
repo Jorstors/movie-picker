@@ -1,6 +1,6 @@
 // components/AddEditEvents.tsx
 import { Button } from "@/components/ui/button";
-import { TicketPlus, TicketMinus } from "lucide-react";
+import { TicketPlus } from "lucide-react";
 import {
   Dialog,
   DialogTrigger,
@@ -13,6 +13,8 @@ import SpinGenreDialogue from "./SpinGenreDialogue";
 import { TimePicker } from "@/components/TimePicker";
 import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
+import { Event } from "@/lib/types";
+import { EventCreate } from "@/lib/Events";
 
 
 function AddEdit() {
@@ -53,31 +55,15 @@ function AddEdit() {
     setDisabled(true);
 
     // API call to create event
-    try {
-      const postData = {
-        title: title,
-        genre: selectedGenre,
-        date: dateString,
-        time: time,
-        location: location,
-        author: author
-      }
-      const response = await fetch("/api/events", {
-        method: "POST",
-        body: JSON.stringify(postData),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      if (response.ok) {
-        window.location.reload(); // Refresh to show new event
-      }
+    const event: Event = {
+      title: title,
+      genre: selectedGenre,
+      date: dateString,
+      time: time,
+      location: location,
+      author: author
     }
-    catch (error) {
-      console.error("Error creating event:", error);
-      alert("There was an error creating the event. Please try again.");
-    }
-
+    await EventCreate(event)
     // Reset form
     setSelectedGenre("None");
     setDate(new Date());

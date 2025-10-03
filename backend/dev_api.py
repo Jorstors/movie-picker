@@ -16,7 +16,6 @@ class Event(BaseModel):
 
 
 class RSVP(BaseModel):
-    event_id: int
     movie: str
     author: str
 
@@ -153,11 +152,14 @@ async def create_event(event: Event):
 
 @app.post("/api/rsvps")
 async def rsvp_event(RSVP: RSVP):
-    return JSONResponse(
-        content={"message": f"RSVP for event {RSVP.event_id} created successfully."}
-    )
+    return JSONResponse(content={"message": "RSVP for event created successfully."})
 
 
 @app.delete("/api/events/{event_id}")
 async def delete_event(event_id: int):
     return JSONResponse(content={"message": f"Event {event_id} deleted successfully."})
+
+
+@app.delete("/api/rsvps/{rsvp_id}")
+async def delete_rsvp(rsvp_id: int):
+    return JSONResponse(content={"message": f"RSVP {rsvp_id} deleted successfully."})

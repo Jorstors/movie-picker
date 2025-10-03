@@ -1,5 +1,7 @@
 // Helper function to fetch and return a list of RSVPs
 
+import { RSVP } from "./types";
+
 async function RSVPsFetch(eventID: number) {
   try {
     const res = await fetch("/api/rsvps/" + eventID);
@@ -27,5 +29,23 @@ async function RSVPsDelete(rsvpID: number) {
   }
 }
 
+async function RSVPsCreate(rsvp: RSVP) {
+  try {
+    const response = await fetch("/api/rsvps", {
+      method: "POST",
+      body: JSON.stringify(rsvp),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    if (response.ok) {
+      console.log("RSVP created successfully");
+    }
+  }
+  catch (error) {
+    console.error("Error creating RSVP:", error);
+  }
+}
+
 export default RSVPsFetch;
-export { RSVPsDelete };
+export { RSVPsDelete, RSVPsCreate };

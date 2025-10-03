@@ -29,8 +29,9 @@ VALUES (%s, %s, %s, %s, %s, %s) RETURNING id
 
 insert_rsvp = """
 INSERT INTO rsvps (event_id, author, movie)
-VALUES (%s, %s, %s) RETURNING id
+VALUES (%s, %s, %s)
 ON CONFLICT (event_id, author) DO NOTHING
+RETURNING id
 """
 
 get_events_query = """

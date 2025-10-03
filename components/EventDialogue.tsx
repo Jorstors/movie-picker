@@ -67,6 +67,10 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
     if (!open) return; // Only fetch when dialog is opened
     const fetchRSVPs = async () => {
       try {
+        if (!id) {
+          console.error("Event ID is undefined.");
+          return;
+        }
         const rsvps_data = await RSVPsFetch(id);
         setRSVPs(rsvps_data);
       }
@@ -107,7 +111,9 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
             <SpinDialogue
               RSVPs={RSVPs}
             />
-            <AddEditMovies />
+            <AddEditMovies
+              id={id}
+            />
             {/* RSVPs (Movie + Author Cards) */}
             {loading ? (
               <p>Loading RSVPs...</p>
@@ -144,6 +150,10 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
                       variant="destructive"
                       className="hover:cursor-pointer bg-destructive hover:bg-destructive"
                       onClick={async () => {
+                        if (!id) {
+                          console.error("Event ID is undefined.");
+                          return;
+                        }
                         await EventDelete(id);
                       }}
                     >

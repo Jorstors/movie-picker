@@ -1,5 +1,7 @@
 // Helper function to fetch and return a list of events
 
+import { Event } from "./types";
+
 async function EventFetch() {
   /*
    * Return the events list from the backend API
@@ -45,5 +47,25 @@ async function EventDelete(event_id: number) {
   }
 }
 
+async function EventCreate(event: Event) {
+  try {
+    const response = await fetch("/api/events", {
+      method: "POST",
+      body: JSON.stringify(event),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    if (response.ok) {
+      window.location.reload(); // Refresh to show new event
+    }
+  }
+  catch (error) {
+    console.error("Error creating event:", error);
+    alert("There was an error creating the event. Please try again.");
+  }
+
+}
+
 export default EventFetch;
-export { EventDelete };
+export { EventDelete, EventCreate };
