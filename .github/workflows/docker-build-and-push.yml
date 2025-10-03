@@ -1,0 +1,31 @@
+name: Build & Publish Latest Docker Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - file: dockerfile.frontend
+            image: jorstors/movie-picker-fe:latest
+          - file: dockerfile.backend
+            image: jorstors/movie-picker-be:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: jorstors
+          password: ${{ secrets.DOCKER_PAT }}
+
+      - name: Build & push latest
+        run: |
+          docker build -t ${{ matrix.image }} -f ${{ matrix.file }} .
+          docker push ${{ matrix.image }}
