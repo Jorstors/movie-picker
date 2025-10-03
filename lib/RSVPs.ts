@@ -5,9 +5,9 @@ import { RSVP } from "./types";
 async function RSVPsFetch(eventID: number) {
   try {
     const res = await fetch("/api/rsvps/" + eventID);
-    const events_data = await res.json();
+    const rsvps_data = await res.json();
 
-    return events_data["rsvps"];
+    return rsvps_data["rsvps"];
   }
   catch (error) {
     console.error("Error fetching events:", error);
