@@ -7,8 +7,6 @@ async function RSVPsFetch(eventID: number) {
     const res = await fetch("/api/rsvps/" + eventID);
     const rsvps_data = await res.json();
 
-    console.log("Fetched RSVPs:", rsvps_data["rsvps"]);
-
     return rsvps_data["rsvps"];
   }
   catch (error) {
