@@ -10,6 +10,7 @@ export type Event = {
 }
 
 export type RSVP = {
+  rsvp_id?: number;
   id: string;
   author: string;
   movie: string;

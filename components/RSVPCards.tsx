@@ -22,6 +22,8 @@ function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
   const { editing } = useContext(editingContext);
   const [disabled, setDisabled] = useState<boolean>(false);
 
+  console.log("RSVPCards - RSVPs: ", RSVPs);
+
   return (
     <div className="w-full min-h-fit py-5 flex flex-col gap-2 items-center content-center">
       {RSVPs.length > 0 ? (
@@ -55,8 +57,8 @@ function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
                         disabled={disabled}
                         onClick={async () => {
                           setDisabled(true);
-                          console.log(`Deleting RSVP with id: ${rsvp.id}`);
-                          await RSVPsDelete(parseInt(rsvp.id));
+                          console.log(`Deleting RSVP with id: ${rsvp.rsvp_id}`);
+                          await RSVPsDelete(parseInt(rsvp.rsvp_id?.toString() || "0"));
                           window.location.reload();
                         }}
                       >

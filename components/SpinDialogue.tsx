@@ -27,17 +27,18 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
       let hexColor = randomColor.toString(16);
       hexColor = '#' + hexColor.padStart(6, '0');
       // id, text(movie name), and color
+      if (!rsvp.rsvp_id) return; // Skip if rsvp_id is undefined
       segments.push({
-        id: rsvp.id, text: rsvp.movie, color: hexColor
+        id: rsvp.rsvp_id.toString(), text: rsvp.movie, color: hexColor
       });
     });
   }
 
   // If no RSVPs, show placeholder segments
-  if (segments.length === 0) {
+  if (segments.length <= 1) {
     segments = [
-      { id: '1', text: 'No RSVPs Yet', color: '#d3d3d3' },
-      { id: '2', text: 'No RSVPs Yet', color: '#a9a9a9' },
+      { id: '1', text: 'Too Little RSVPs', color: '#d3d3d3' },
+      { id: '2', text: 'Too Little RSVPs', color: '#a9a9a9' },
     ]
   }
 

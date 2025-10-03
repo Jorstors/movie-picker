@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 # psycopg using dict row factory
 from .SQL_UTIL.db import POOL
 from .SQL_UTIL.operations import (
+    get_rsvps_for_event,
     insert_event,
     insert_rsvp,
     delete_event_query,
@@ -49,19 +50,12 @@ async def get_events():
 
 @app.get("/api/rsvps/{event_id}")
 async def get_rsvps(event_id: int):
-    rsvps = [
-        {"id": "Requesting RSVPs", "movie": "For", "author": f"Event ID: {event_id}"},
-        {"id": "1", "movie": "Inception", "author": "Alice"},
-        {"id": "2", "movie": "The Matrix", "author": "Bob"},
-        {"id": "3", "movie": "Interstellar", "author": "Charlie"},
-        {"id": "4", "movie": "The Dark Knight", "author": "Diana"},
-        {"id": "5", "movie": "Pulp Fiction", "author": "Eve"},
-        {"id": "6", "movie": "Forrest Gump", "author": "Frank"},
-        {"id": "7", "movie": "The Shawshank Redemption", "author": "Grace"},
-        {"id": "8", "movie": "The Godfather", "author": "Hank"},
-        {"id": "9", "movie": "Fight Club", "author": "Ivy"},
-        {"id": "10", "movie": "The Lord of the Rings", "author": "Jack"},
-    ]
+    rsvps = []
+    with POOL.connection() as conn:
+        with conn.cursor() as cur:
+            _ = cur.execute(get_rsvps_for_event, (event_id,))
+            rsvps = cur.fetchall()
+
     return JSONResponse(content={"rsvps": rsvps})
 
 
@@ -102,6 +96,8 @@ async def rsvp_event(RSVP: RSVP):
             _ = cur.execute(insert_rsvp, (RSVP.id, RSVP.author, RSVP.movie))
             res = cur.fetchone()
             rsvp_id = res["id"] if res else -1
+    # TODO:
+    # USE WILL's API KEY FOR RADARR DOWNLOAD ON HIS SERVER
     return JSONResponse(
         content={
             "message": f"RSVP for event {RSVP.id} created successfully with id {rsvp_id}"
