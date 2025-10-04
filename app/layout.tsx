@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,7 +31,10 @@ export default function RootLayout({
       <body suppressHydrationWarning
         className={`max-w-screen overflow-x-hidden ${geistSans.variable} ${geistMono.variable} antialiased w-screen min-h-screen scrollbar-hidden`}
       >
-        {children}
+        {/* Only render dark theme */}
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
