@@ -54,7 +54,7 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
           <LoaderPinwheelIcon className="size-10" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit">
+      <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit text-transparent">
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>

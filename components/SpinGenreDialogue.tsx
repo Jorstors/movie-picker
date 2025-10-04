@@ -55,14 +55,14 @@ function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string,
           <LoaderPinwheelIcon className="size-10" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit">
+      <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit text-transparent">
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>
         <SpinWheel
           segments={segments}
           onSpinComplete={handleSpinComplete}
-          size={200}
+          size={300}
           showSpinButton={false}
         />
         <DialogDescription className="text-transparent">Spin Picker For Genres</DialogDescription>
