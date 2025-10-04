@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`max-w-screen overflow-x-hidden ${geistSans.variable} ${geistMono.variable} antialiased w-screen min-h-screen scrollbar-hidden`}
       >
         {/* Only render dark theme */}
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <ThemeProvider forcedTheme="dark">
           {children}
         </ThemeProvider>
       </body>
