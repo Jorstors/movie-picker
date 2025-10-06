@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/dialog";
 import SpinGenreDialogue from "./SpinGenreDialogue";
 import { TimePicker } from "@/components/TimePicker";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Event } from "@/lib/types";
 import { EventCreate } from "@/lib/Events";
+import { userContext } from "@/app/page";
 
 
 function AddEdit() {
+  const { user } = useContext(userContext);
 
   const [selectedGenre, setSelectedGenre] = useState<string>("None");
   const [date, setDate] = useState<Date>(new Date());
@@ -27,6 +29,14 @@ function AddEdit() {
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [disabled, setDisabled] = useState<boolean>(false);
+
+  console.log("User from Context: ", user);
+  console.log("Author State: ", author);
+
+  // Sync author state with user context
+  useEffect(() => {
+    setAuthor(user);
+  }, [user]);
 
   useEffect(() => {
     const year = date.getFullYear();
@@ -70,7 +80,7 @@ function AddEdit() {
     setTime("12:00");
     setLocation("");
     setTitle("");
-    setAuthor("");
+    setAuthor(user);
     setDisabled(false);
   }
 
