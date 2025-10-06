@@ -28,7 +28,7 @@ function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
     <div className="w-full min-h-fit py-5 flex flex-col gap-2 items-center content-center">
       {RSVPs.length > 0 ? (
         RSVPs.map((rsvp) => (
-          <div key={rsvp.id} className="w-full flex flex-row gap-2 items-center justify-between">
+          <div key={rsvp.rsvp_id} className="w-full flex flex-row gap-2 items-center justify-between">
             {editing && (
 
               <AlertDialog>

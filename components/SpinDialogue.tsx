@@ -34,40 +34,44 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
     });
   }
 
-  // If no RSVPs, show placeholder segments
-  if (segments.length <= 1) {
-    segments = [
-      { id: '1', text: 'Too Little RSVPs', color: '#d3d3d3' },
-      { id: '2', text: 'Too Little RSVPs', color: '#a9a9a9' },
-    ]
-  }
-
   const handleSpinComplete = () => {
     console.log('Spin complete!');
   }
 
-  return (
+  console.log("Segments for Spin Wheel: ", segments);
 
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="default" className="text-lg py-10 min-w-fit w-25 hover:cursor-pointer mt-2 mb-5">
+
+  return (
+    <>
+      {segments.length <= 1 && (
+        <Button variant="default" className="text-lg py-10 min-w-fit w-25 hover:cursor-not-allowed mt-2 mb-5" disabled>
           <LoaderPinwheelIcon className="size-10" />
         </Button>
-      </DialogTrigger>
-      <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit text-transparent">
-        <DialogHeader>
-          <DialogTitle></DialogTitle>
-        </DialogHeader>
-        <SpinWheel
-          segments={segments}
-          onSpinComplete={handleSpinComplete}
-          size={700}
-          showSpinButton={false}
-        />
-        <DialogDescription className="text-transparent">Spin Picker For Movies</DialogDescription>
-      </DialogContent>
-    </Dialog>
-
+      )}
+      {
+        segments.length > 1 && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="default" className="text-lg py-10 min-w-fit w-25 hover:cursor-pointer mt-2 mb-5">
+                <LoaderPinwheelIcon className="size-10" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit text-transparent">
+              <DialogHeader>
+                <DialogTitle></DialogTitle>
+              </DialogHeader>
+              <SpinWheel
+                segments={segments}
+                onSpinComplete={handleSpinComplete}
+                size={700}
+                showSpinButton={false}
+              />
+              <DialogDescription className="text-transparent">Spin Picker For Movies</DialogDescription>
+            </DialogContent>
+          </Dialog>
+        )
+      }
+    </>
   )
 }
 
