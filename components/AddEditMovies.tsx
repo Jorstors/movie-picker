@@ -56,7 +56,12 @@ function AddEditMovies({ id, onSuccess }: { id?: number, onSuccess: () => void }
             <UserPlus /> RSVP
           </Button>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !disabled) {
+              handleSubmit();
+            }
+          }}>
           <div className="w-full min-h-fit p-5 flex flex-col gap-5 items-center content-center">
             <Input
               type="text"
@@ -93,7 +98,7 @@ function AddEditMovies({ id, onSuccess }: { id?: number, onSuccess: () => void }
       >
         <UserRoundPen /> Edit
       </Button>
-    </div>
+    </div >
   )
 };
 

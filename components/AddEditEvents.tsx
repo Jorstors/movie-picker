@@ -58,7 +58,6 @@ function AddEdit({ onSuccess }: { onSuccess: () => void }) {
 
     // Basic form validation
     if (selectedGenre === "None" || !dateString || !time || !location || !title || !author) {
-      alert("Please fill out all fields before creating an event.");
       return;
     }
 
@@ -108,7 +107,14 @@ function AddEdit({ onSuccess }: { onSuccess: () => void }) {
             <TicketPlus /> Add Event
           </Button>
         </DialogTrigger>
-        <DialogContent className="min-w-md flex flex-col items-center content-center p-15">
+        <DialogContent
+          className="min-w-md flex flex-col items-center content-center p-15"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !disabled) {
+              handleCreateEvent();
+            }
+          }}
+        >
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Add New Event</DialogTitle>
           </DialogHeader>
