@@ -60,7 +60,7 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
               <SpinWheel
                 segments={segments}
                 onSpinComplete={handleSpinComplete}
-                size={700}
+                size={500}
                 showSpinButton={false}
               />
               <DialogDescription className="text-transparent">Spin Picker For Movies</DialogDescription>
