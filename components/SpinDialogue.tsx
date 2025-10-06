@@ -19,7 +19,7 @@ import { RSVP } from "@/lib/types";
 function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
 
   // Fill out segments with RSVP list
-  let segments: WheelSegment[] = [];
+  const segments: WheelSegment[] = [];
   if (RSVPs) {
     RSVPs.forEach((rsvp) => {
       // Assign a color based on index (hex colors)
@@ -37,9 +37,6 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
   const handleSpinComplete = () => {
     console.log('Spin complete!');
   }
-
-  console.log("Segments for Spin Wheel: ", segments);
-
 
   return (
     <>
