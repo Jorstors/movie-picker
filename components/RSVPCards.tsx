@@ -17,7 +17,12 @@ import {
 } from "@/components/ui/alert-dialog"
 import { RSVPsDelete } from "@/lib/RSVPs";
 
-function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
+type RSVPCardsProps = {
+  RSVPs: RSVP[];
+  onSuccess: () => void;
+}
+
+function RSVPCards({ RSVPs, onSuccess }: RSVPCardsProps) {
 
   const { editing } = useContext(editingContext);
   const [disabled, setDisabled] = useState<boolean>(false);
@@ -59,7 +64,8 @@ function RSVPCards({ RSVPs }: { RSVPs: RSVP[] }) {
                           setDisabled(true);
                           console.log(`Deleting RSVP with id: ${rsvp.rsvp_id}`);
                           await RSVPsDelete(parseInt(rsvp.rsvp_id?.toString() || "0"));
-                          window.location.reload();
+                          setDisabled(false);
+                          onSuccess();
                         }}
                       >
                         <Trash2Icon />

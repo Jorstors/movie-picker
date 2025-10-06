@@ -52,14 +52,19 @@ type EditingContextType = {
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+type EventDialogueProps = Event & {
+  onSuccess: () => void;
+}
+
 const editingContext = createContext<EditingContextType>({} as EditingContextType);
 
-function EventDialogue({ id, title, genre, date, time, location, author }: Event) {
+function EventDialogue({ id, title, genre, date, time, location, author, onSuccess }: EventDialogueProps) {
 
   const [open, setOpen] = useState<boolean>(false);
   const [RSVPs, setRSVPs] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [editing, setEditing] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<number>(0);
 
   // Fetch RSVP tables based on EventID 
   // to feed Spin Wheel and RSVP Cards
@@ -83,7 +88,7 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
       }
     }
     fetchRSVPs();
-  }, [id, open]);
+  }, [id, open, refresh]);
 
   return (
     <editingContext.Provider value={{ editing, setEditing }}>
@@ -113,6 +118,7 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
             />
             <AddEditMovies
               id={id}
+              onSuccess={() => setRefresh((prev) => prev + 1)}
             />
             {/* RSVPs (Movie + Author Cards) */}
             {loading ? (
@@ -123,6 +129,7 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
               ) : (
                 <RSVPCards
                   RSVPs={RSVPs}
+                  onSuccess={() => setRefresh((prev) => prev + 1)}
                 />
               ))}
             <AlertDialog>
@@ -155,6 +162,7 @@ function EventDialogue({ id, title, genre, date, time, location, author }: Event
                           return;
                         }
                         await EventDelete(id);
+                        onSuccess();
                       }}
                     >
                       <Trash2Icon />

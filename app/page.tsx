@@ -21,6 +21,7 @@ function Home() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState("");
+  const [refresh, setRefresh] = useState<number>(0);
 
   useEffect(() => {
     console.log("User context updated:", user);
@@ -42,7 +43,7 @@ function Home() {
       }
     }
     fetchEvents();
-  }, []);
+  }, [refresh]);
 
   return (
     <userContext.Provider value={{ user, setUser }}>
@@ -58,7 +59,9 @@ function Home() {
 
           {/* Add & Edit */}
           <div>
-            <AddEdit />
+            <AddEdit
+              onSuccess={() => setRefresh((prev) => prev + 1)}
+            />
           </div>
 
           {/* Event Cards */}
@@ -78,6 +81,7 @@ function Home() {
                   time={event.time}
                   location={event.location}
                   author={event.author}
+                  onSuccess={() => setRefresh((prev) => prev + 1)}
                 />
               ))
             ))}

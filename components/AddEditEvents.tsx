@@ -18,9 +18,9 @@ import { EventCreate } from "@/lib/Events";
 import { userContext } from "@/app/page";
 
 
-function AddEdit() {
+function AddEdit({ onSuccess }: { onSuccess: () => void }) {
   const { user } = useContext(userContext);
-
+  const [open, setOpen] = useState<boolean>(false);
   const [selectedGenre, setSelectedGenre] = useState<string>("None");
   const [date, setDate] = useState<Date>(new Date());
   const [dateString, setDateString] = useState<string>("");
@@ -82,6 +82,10 @@ function AddEdit() {
     setTitle("");
     setAuthor(user);
     setDisabled(false);
+
+    // Notify parent to refresh event list
+    setOpen(false);
+    onSuccess();
   }
 
 
@@ -98,7 +102,7 @@ function AddEdit() {
   ]
   return (
     <div className="w-full h-15 flex gap-4 items-center content-center">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild >
           <Button variant="outline" size="lg" className="hover:cursor-pointer">
             <TicketPlus /> Add Event

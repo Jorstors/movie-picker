@@ -9,7 +9,7 @@ import { RSVPsCreate } from "@/lib/RSVPs";
 import { RSVP } from "@/lib/types";
 import { userContext } from "@/app/page";
 
-function AddEditMovies({ id }: { id?: number }) {
+function AddEditMovies({ id, onSuccess }: { id?: number, onSuccess: () => void }) {
   const { user } = useContext(userContext);
 
   const { editing, setEditing } = useContext(editingContext);
@@ -42,7 +42,7 @@ function AddEditMovies({ id }: { id?: number }) {
     await RSVPsCreate(rsvp);
     setDisabled(false);
     setOpen(false);
-    window.location.reload();
+    onSuccess();
   }
 
   return (

@@ -38,7 +38,6 @@ async function EventDelete(event_id: number) {
     })
     if (res.ok) {
       console.log("Event deleted successfully");
-      window.location.reload(); // Refresh to show updated events list
     }
   }
   catch (error) {
@@ -57,7 +56,7 @@ async function EventCreate(event: Event) {
       }
     })
     if (response.ok) {
-      window.location.reload(); // Refresh to show new event
+      console.log("Event created successfully");
     }
   }
   catch (error) {
