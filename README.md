@@ -1,25 +1,28 @@
 # Movie Picker
 
-Tiny full-stack app for planning movie nights:
-- **Frontend:** Next.js 15 + React 19 + Tailwind 4 + shadcn/ui (proxying `/api/*` to the backend).
-- **Backend:** FastAPI + psycopg (connection pool) with a simple Events/RSVPs schema on Postgres.
+Tiny full‑stack app for planning movie nights.
+
+- **Frontend:** Next.js 15 (App Router) + React 19 + Tailwind CSS v4 + shadcn/ui
+- **Backend:** FastAPI (uvicorn) + psycopg + Postgres 16
+- **Proxy:** Next rewrites `/api/*` → backend (local or container), controlled by envs
 
 ## Quick Start
 
 ### Option A — Docker (recommended)
 ```bash
-# From repo root
+# from repo root
 docker compose -f dockercompose.yml up -d
+
+# URLs
 # Frontend → http://localhost:3000
 # Backend  → http://localhost:8000
-# Postgres → localhost:5432 (moviepicker/moviepickerpass)
+# Postgres → localhost:5432 (db: moviepicker / user: moviepicker / pass: moviepickerpass)
 ```
-- Compose spins up Postgres, runs the schema initializer, then starts the API and UI.
+Compose spins up Postgres, runs the schema initializer, then starts API and UI.
 
-### Option B — Local dev
+### Option B — Local Dev
 **Backend**
 ```bash
-# From repo root
 pip install -r backend/requirements.txt
 export MOVIE_PICKER_DB_URL="postgresql://moviepicker:moviepickerpass@localhost:5432/moviepicker"
 uvicorn backend.api:app --host 0.0.0.0 --port 8000 --reload
@@ -27,45 +30,36 @@ uvicorn backend.api:app --host 0.0.0.0 --port 8000 --reload
 
 **Frontend**
 ```bash
-# In another shell, from repo root
 npm install
 # Set LOCAL_DEV so Next proxies to http://localhost:8000
-# macOS/Linux:
+# macOS/Linux
 LOCAL_DEV=TRUE npm run dev
-# Windows (cmd):
+# Windows (cmd)
 set LOCAL_DEV=TRUE && npm run dev
 ```
 
-## Environment Variables
-- `MOVIE_PICKER_DB_URL` – Postgres connection string (used by backend pool). Example (docker network): `postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker`  
-- `MOVIE_PICKER_API_URL` – When **not** in local dev, Next proxies `/api/*` to this URL (e.g., `http://backend:8000`).  
-- `LOCAL_DEV` – If set, Next uses `http://localhost:8000` for the proxy target.  
+## Environment
 
-## Scripts
-```json
-"scripts": {
-  "dev": "next dev --turbopack",
-  "build": "next build --turbopack",
-  "start": "next start",
-  "lint": "eslint"
-}
-```
+- `MOVIE_PICKER_DB_URL` – Postgres connection string (backend uses a psycopg pool).
+  - Example (Docker network): `postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker`
+- `MOVIE_PICKER_API_URL` – Backend base URL for the proxy in production/containers (e.g. `http://backend:8000`).
+- `LOCAL_DEV` – If set, Next uses `http://localhost:8000` as the proxy target. If **not** set, it uses `MOVIE_PICKER_API_URL`.
 
-## API (FastAPI)
+## API (FastAPI, base `/api`)
 
-Base: `/api`
+| Method | Path                  | Body / Notes |
+|-------:|-----------------------|--------------|
+| GET    | `/health`             | Health check. |
+| GET    | `/events`             | Returns latest 15 events. |
+| POST   | `/events`             | `{ title, genre, date, time, location, author }` → creates event (returns id). |
+| PATCH  | `/events/{event_id}`  | Partial update on any fields above. |
+| DELETE | `/events/{event_id}`  | Deletes an event (RSVPs cascade via FK). |
+| GET    | `/rsvps/{event_id}`   | RSVPs for an event. Fields: `id` (event_id), `rsvp_id`, `author`, `movie`, `weight`. |
+| POST   | `/rsvps`              | `{ id, author, movie }` where `id` is the event id. Conflict on `(event_id, author)` is ignored. |
+| PATCH  | `/rsvps/{rsvp_id}`    | Partial update on `{ movie?, author?, weight? }`. |
+| DELETE | `/rsvps/{rsvp_id}`    | Deletes an RSVP. |
 
-| Method | Path                  | Body                            | Notes |
-|---|---|---|---|
-| GET  | `/health`              | —                               | Health check. |
-| GET  | `/events`              | —                               | Returns latest 15 events. |
-| POST | `/events`              | `{ title, genre, date, time, location, author }` | Creates event; returns id. |
-| DELETE | `/events/{event_id}` | —                               | Deletes event (cascades RSVPs via FK). |
-| GET  | `/rsvps/{event_id}`    | —                               | Returns RSVPs for event (fields: `id`=event_id, `rsvp_id`, `author`, `movie`). |
-| POST | `/rsvps`               | `{ id, author, movie }`         | Creates RSVP; conflict on `(event_id, author)` is ignored. |
-| DELETE | `/rsvps/{rsvp_id}`   | —                               | Deletes RSVP. |
-
-## Database Schema (Postgres)
+## Database Schema
 
 ```sql
 CREATE TABLE IF NOT EXISTS events (
@@ -83,10 +77,29 @@ CREATE TABLE IF NOT EXISTS rsvps (
   event_id BIGINT NOT NULL REFERENCES events(id) ON DELETE CASCADE,
   author VARCHAR(255) NOT NULL,
   movie VARCHAR(255) NOT NULL,
+  weight INT DEFAULT 1,
   UNIQUE (event_id, author)
 );
 ```
+Schema is created on container start by `python -m backend.SQL_UTIL.init_db` (run via the `initialize` service in `dockercompose.yml`).
 
-- Created at container start by `python -m backend.SQL_UTIL.init_db`.
+## Scripts
 
+```json
+"scripts": {
+  "dev": "next dev --turbopack",
+  "build": "next build --turbopack",
+  "start": "next start",
+  "lint": "eslint"
+}
+```
 
+## Notes
+
+- Frontend proxies all `/api/*` calls (see `next.config.ts` rewrites).
+- Calendar page is currently a placeholder/WIP.
+- Dockerfiles: `dockerfile.frontend` and `dockerfile.backend` are built into `jorstors/movie-picker-fe:latest` and `jorstors/movie-picker-be:latest` (see `dockercompose.yml`).
+
+---
+
+Made with ❤️ for quick movie‑night planning.
