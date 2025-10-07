@@ -14,5 +14,6 @@ CREATE TABLE IF NOT EXISTS rsvps (
   FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
   author VARCHAR(255) NOT NULL,
   movie VARCHAR(255) NOT NULL,
+  weight INT DEFAULT 1,
   UNIQUE (event_id, author)
 )

@@ -2,7 +2,7 @@
 import { RSVP } from "@/lib/types";
 import { editingContext } from "./EventDialogue";
 import { useContext, useState } from "react";
-import { MinusIcon, Trash2Icon } from "lucide-react";
+import { MinusIcon, PlusIcon, Trash2Icon, WeightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -26,8 +26,36 @@ function RSVPCards({ RSVPs, onSuccess }: RSVPCardsProps) {
 
   const { editing } = useContext(editingContext);
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [weightDisabled, setWeightDisabled] = useState<boolean>(false);
 
   console.log("RSVPCards - RSVPs: ", RSVPs);
+
+  const updateWeight = async (rsvp_id: number, weight: number, increment: boolean) => {
+    if (weight <= 1 && !increment) return; // Prevent weight from going below 1
+    setWeightDisabled(true);
+    const newWeight = increment ? weight + 1 : weight - 1;
+
+    const updatedRSVPInfo = {
+      weight: newWeight
+    }
+    try {
+      // Patch request to update weight
+      await fetch(`/api/rsvps/${rsvp_id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedRSVPInfo)
+      })
+    }
+    catch (error) {
+      console.error("Error updating weight:", error);
+    }
+    finally {
+      setWeightDisabled(false);
+      onSuccess();
+    }
+  }
 
   return (
     <div className="w-full min-h-fit py-5 flex flex-col gap-2 items-center content-center">
@@ -88,6 +116,35 @@ function RSVPCards({ RSVPs, onSuccess }: RSVPCardsProps) {
                 {rsvp.author}
               </p>
             </div>
+            {editing && (
+              <>
+                <div className="w-fit h-full flex flex-col gap-2 items-center justify-center">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:cursor-pointer"
+                    disabled={weightDisabled}
+                    onClick={() => updateWeight(rsvp.rsvp_id || 0, rsvp.weight || 1, true)}
+                  >
+                    <PlusIcon />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:cursor-pointer"
+                    disabled={weightDisabled}
+                    onClick={() => updateWeight(rsvp.rsvp_id || 0, rsvp.weight || 1, false)}
+                  >
+                    <MinusIcon />
+                  </Button>
+                </div>
+                <div className="w-fit h-full flex gap-3 items-center justify-center">
+                  {/* Weight Count */}
+                  {rsvp.weight || 1}
+                  <WeightIcon size={16} />
+                </div>
+              </>
+            )}
           </div>
         ))
       ) : (

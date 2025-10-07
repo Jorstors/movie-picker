@@ -29,7 +29,7 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
       // id, text(movie name), and color
       if (!rsvp.rsvp_id) return; // Skip if rsvp_id is undefined
       segments.push({
-        id: rsvp.rsvp_id.toString(), text: rsvp.movie, color: hexColor
+        id: rsvp.rsvp_id.toString(), text: rsvp.movie, color: hexColor, weight: rsvp.weight
       });
     });
   }

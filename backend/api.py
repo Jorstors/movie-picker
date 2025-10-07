@@ -40,6 +40,13 @@ class RSVP(BaseModel):
     id: int
     movie: str
     author: str
+    weight: int | None = 1
+
+
+class RSVPPatch(BaseModel):
+    movie: str | None = None
+    author: str | None = None
+    weight: int | None = None
 
 
 @app.get("/api/health")
@@ -176,4 +183,42 @@ def patch_event(event_id: int, event: EventPatch):
 
     return JSONResponse(
         content={"message": f"Event {event_id} patched", "updated_fields": cols}
+    )
+
+
+@app.patch("/api/rsvps/{rsvp_id}")
+def patch_rsvp(rsvp_id: int, rsvp: RSVPPatch):
+    cols: list[str] = []
+    vals: list[str | int] = []
+
+    if rsvp.movie is not None:
+        cols.append("movie")
+        vals.append(rsvp.movie)
+    if rsvp.author is not None:
+        cols.append("author")
+        vals.append(rsvp.author)
+    if rsvp.weight is not None:
+        cols.append("weight")
+        vals.append(rsvp.weight)
+
+    if not cols:
+        return JSONResponse(
+            status_code=400, content={"message": "No fields provided for update."}
+        )
+
+    # "column" = %s, "column2" = %s, ...
+    set_clause = SQL(", ").join(SQL("{} = %s").format(Identifier(col)) for col in cols)
+
+    query = SQL("UPDATE rsvps SET {} WHERE id = %s RETURNING id").format(set_clause)
+
+    with POOL.connection() as conn:
+        with conn.cursor() as cur:
+            _ = cur.execute(query, (*vals, rsvp_id))
+            if not cur.fetchone():
+                return JSONResponse(
+                    status_code=404, content={"message": f"RSVP {rsvp_id} not found"}
+                )
+
+    return JSONResponse(
+        content={"message": f"RSVP {rsvp_id} patched", "updated_fields": cols}
     )

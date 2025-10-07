@@ -14,4 +14,5 @@ export type RSVP = {
   id: string;
   author: string;
   movie: string;
+  weight?: number;
 }

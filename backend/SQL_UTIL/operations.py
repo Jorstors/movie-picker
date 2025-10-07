@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS rsvps (
   FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
   author VARCHAR(255) NOT NULL,
   movie VARCHAR(255) NOT NULL,
+  weight INT DEFAULT 1,
   UNIQUE (event_id, author)
 )
 """
@@ -42,7 +43,7 @@ LIMIT 15
 """
 
 get_rsvps_for_event = """
-SELECT event_id AS id, id AS rsvp_id, author, movie
+SELECT event_id AS id, id AS rsvp_id, author, movie, weight
 FROM rsvps
 WHERE event_id = %s
 ORDER BY id DESC
