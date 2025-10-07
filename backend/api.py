@@ -1,7 +1,7 @@
 # backend/api.py
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from psycopg.sql import SQL, Identifier, Literal
+from psycopg.sql import SQL, Identifier
 
 # psycopg using dict row factory
 from .SQL_UTIL.db import POOL
@@ -134,43 +134,46 @@ async def delete_rsvp(rsvp_id: int):
 
 @app.patch("/api/events/{event_id}")
 def patch_event(event_id: int, event: EventPatch):
-    fields: list[str] = []
-    values: list[str] = []
+    cols: list[str] = []
+    vals: list[str] = []
 
     if event.title is not None:
-        fields.append("title = %s")
-        values.append(event.title)
+        cols.append("title")
+        vals.append(event.title)
     if event.genre is not None:
-        fields.append("genre = %s")
-        values.append(event.genre)
+        cols.append("genre")
+        vals.append(event.genre)
     if event.date is not None:
-        fields.append("date = %s")
-        values.append(event.date)
+        cols.append("date")
+        vals.append(event.date)
     if event.time is not None:
-        fields.append("time = %s")
-        values.append(event.time)
+        cols.append("time")
+        vals.append(event.time)
     if event.location is not None:
-        fields.append("location = %s")
-        values.append(event.location)
+        cols.append("location")
+        vals.append(event.location)
     if event.author is not None:
-        fields.append("author = %s")
-        values.append(event.author)
+        cols.append("author")
+        vals.append(event.author)
 
-    if not fields:
+    if not cols:
         return JSONResponse(
-            status_code=400,
-            content={"message": "No fields provided for update."},
+            status_code=400, content={"message": "No fields provided for update."}
         )
 
-    values.append(str(event_id))
-    set_clause = SQL(", ").join(Identifier(field) for field in fields)
-    # f string can't be used with psycopg safely apparently
-    query = SQL("UPDATE events SET {set_clause} WHERE id = %s").format(
-        set_clause=set_clause
-    )
+    # "column" = %s, "column2" = %s, ...
+    set_clause = SQL(", ").join(SQL("{} = %s").format(Identifier(col)) for col in cols)
+
+    query = SQL("UPDATE events SET {} WHERE id = %s RETURNING id").format(set_clause)
 
     with POOL.connection() as conn:
         with conn.cursor() as cur:
-            _ = cur.execute(query, tuple(values))
+            _ = cur.execute(query, (*vals, event_id))
+            if not cur.fetchone():
+                return JSONResponse(
+                    status_code=404, content={"message": f"Event {event_id} not found"}
+                )
 
-    return JSONResponse(content={"message": f"Event {event_id} updated successfully."})
+    return JSONResponse(
+        content={"message": f"Event {event_id} patched", "updated_fields": cols}
+    )

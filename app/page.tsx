@@ -1,12 +1,14 @@
 // app/page.tsx
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import EventFetch from "@/lib/Events";
 
 import TabBar from "@/components/TabBar";
 import AddEdit from "@/components/AddEditEvents";
 import EventDialogue from "@/components/EventDialogue";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, Suspense } from "react";
 import type { Event } from "@/lib/types";
 import PromptName from "@/components/PromptName";
 
@@ -71,19 +73,23 @@ function Home() {
             events.length === 0 ? (
               <p>No events found.</p>
             ) : (
-              events.map((event: Event) => (
-                <EventDialogue
-                  key={event.id}
-                  id={event.id}
-                  title={event.title}
-                  genre={event.genre}
-                  date={event.date}
-                  time={event.time}
-                  location={event.location}
-                  author={event.author}
-                  onSuccess={() => setRefresh((prev) => prev + 1)}
-                />
-              ))
+              <Suspense fallback={<p>Loading events...</p>}>
+                {
+                  events.map((event: Event) => (
+                    <EventDialogue
+                      key={event.id}
+                      id={event.id}
+                      title={event.title}
+                      genre={event.genre}
+                      date={event.date}
+                      time={event.time}
+                      location={event.location}
+                      author={event.author}
+                      onSuccess={() => setRefresh((prev) => prev + 1)}
+                    />
+                  ))
+                }
+              </Suspense>
             ))}
         </div>
       </main>

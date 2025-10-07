@@ -15,9 +15,9 @@ import RSVPCards from "./RSVPCards";
 import type { Event } from "@/app/page";
 import type { RSVP } from "@/lib/types";
 import RSVPsFetch from "@/lib/RSVPs";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Button } from "./ui/button";
-import { Trash2Icon } from "lucide-react";
+import { PencilIcon, Trash2Icon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,6 +32,8 @@ import {
 import { EventDelete } from "@/lib/Events";
 import { createContext } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { TimePicker } from "./TimePicker";
 
 function formatTime(time: string): string {
   // Input: "14:30" -> Output: "2:30 PM"
@@ -59,16 +61,38 @@ type EventDialogueProps = Event & {
 
 const editingContext = createContext<EditingContextType>({} as EditingContextType);
 
-function EventDialogue({ id, title, genre, date, time, location, author, onSuccess }: EventDialogueProps) {
+
+export default function EventDialogue(props: EventDialogueProps) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EventDialogueInner {...props} />
+    </Suspense>
+  )
+}
+
+function EventDialogueInner({ id, title, genre, date, time, location, author, onSuccess }: EventDialogueProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [open, setOpen] = useState<boolean>(false);
+  const [popOpen, setPopOpen] = useState<boolean>(false);
   const [RSVPs, setRSVPs] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [editing, setEditing] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<number>(0);
+
+  const [localTime, setLocalTime] = useState<string>(time);
+  const [localDate, setLocalDate] = useState<Date>(new Date(date));
+
+  // Sync local time and date with props
+  useEffect(() => {
+    setLocalTime(time);
+    // Reformat MM/DD/YYYY to YYYY-MM-DD for Date constructor
+    const splitDate = date.split("/")
+    const cleanedDate = [splitDate[2], splitDate[0], splitDate[1]].join("-")
+    setLocalDate(new Date(cleanedDate));
+  }, [time, date]);
 
   // Open dialogue if URL has eventID param matching this event
   useEffect(() => {
@@ -91,6 +115,37 @@ function EventDialogue({ id, title, genre, date, time, location, author, onSucce
       newSearchParams.delete("event");
     }
     router.replace(`${pathname}?${newSearchParams.toString()}`, { scroll: false });
+  }
+
+  const handleTimeChange = async () => {
+    // API call to update event time
+    if (!id) {
+      console.error("Event ID is undefined. Cannot update time.");
+      return;
+    }
+    // Check if date and time even changed
+    const oldDateSplit = date.split("/")
+    const oldDate = new Date(`${oldDateSplit[2]}-${oldDateSplit[0]}-${oldDateSplit[1]}`);
+    if (localTime === time && localDate.toDateString() === oldDate.toDateString()) {
+      return; // No change
+    }
+
+    const formattedDate = `${localDate.getMonth() + 1}/${localDate.getDate()}/${localDate.getFullYear()}`;
+    const updatedEventInfo = {
+      date: formattedDate,
+      time: localTime
+    }
+
+    await fetch(`/api/events/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(updatedEventInfo)
+    })
+
+    onSuccess(); // Refresh parent event list
+    setPopOpen(false); // Close popover
   }
 
   // Fetch RSVP tables based on EventID 
@@ -138,7 +193,34 @@ function EventDialogue({ id, title, genre, date, time, location, author, onSucce
           </DialogHeader>
           <div className="min-w-xs w-[50vw] h-[70vh] rounded-lg p-5 mx-auto flex flex-col items-center gap-5">
             <Badge variant="outline" className="w-full sm:text-lg text-center  ">
-              {`${date} : ${formatTime(time)}`}
+              <p>
+                {`${date} : ${formatTime(time)}`}
+              </p>
+              <Popover
+                open={popOpen}
+                onOpenChange={setPopOpen}
+              >
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" className="hover:cursor-pointer">
+                    <PencilIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-fit">
+                  <h1 className="font-bold">Edit Date & Time</h1>
+                  <TimePicker
+                    time={localTime}
+                    date={localDate}
+                    setDate={setLocalDate}
+                    setTime={setLocalTime}
+                  />
+                  <Button
+                    className="w-full mt-3 hover:cursor-pointer"
+                    onClick={handleTimeChange}
+                  >
+                    Save
+                  </Button>
+                </PopoverContent>
+              </Popover>
             </Badge>
             <SpinDialogue
               RSVPs={RSVPs}
@@ -209,5 +291,4 @@ function EventDialogue({ id, title, genre, date, time, location, author, onSucce
   )
 }
 
-export default EventDialogue;
 export { editingContext };

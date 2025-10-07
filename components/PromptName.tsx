@@ -1,5 +1,5 @@
 import { userContext } from "@/app/page"
-import { useContext, useState } from "react"
+import { Suspense, useContext, useState } from "react"
 import { Input } from "./ui/input";
 import {
   Card,
@@ -12,6 +12,14 @@ import { Button } from "./ui/button";
 import { useSearchParams } from "next/navigation";
 
 export default function PromptName() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PromptNameInner />
+    </Suspense>
+  )
+}
+
+function PromptNameInner() {
   const { user, setUser } = useContext(userContext);
   const [name, setName] = useState<string>("");
 
@@ -20,7 +28,7 @@ export default function PromptName() {
   // Check if URL has an event query parameter
   // If so, don't show the prompt
   if (searchParams.get("event")) {
-    return <></>
+    return <></>;
   }
 
   // Card that dissappears once name is submitted

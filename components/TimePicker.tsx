@@ -4,7 +4,6 @@ import { ChevronDownIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   Popover,
@@ -13,7 +12,7 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 
-export function TimePicker({ date, setDate, setTime }: { date: Date, setDate: React.Dispatch<React.SetStateAction<Date>>, setTime: React.Dispatch<React.SetStateAction<string>> }) {
+export function TimePicker({ date, time, setDate, setTime }: { date: Date, setDate: React.Dispatch<React.SetStateAction<Date>>, time?: string, setTime: React.Dispatch<React.SetStateAction<string>> }) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -55,7 +54,7 @@ export function TimePicker({ date, setDate, setTime }: { date: Date, setDate: Re
           type="time"
           id="time-picker"
           step="1800" // 30 minute intervals
-          defaultValue="12:00"
+          defaultValue={time ? time : "12:00"}
           onChange={(e) => {
             setTime(e.target.value)
           }}

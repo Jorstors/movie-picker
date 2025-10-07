@@ -30,9 +30,6 @@ function AddEdit({ onSuccess }: { onSuccess: () => void }) {
   const [author, setAuthor] = useState<string>("");
   const [disabled, setDisabled] = useState<boolean>(false);
 
-  console.log("User from Context: ", user);
-  console.log("Author State: ", author);
-
   // Sync author state with user context
   useEffect(() => {
     setAuthor(user);
