@@ -9,10 +9,19 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "./ui/button";
+import { useSearchParams } from "next/navigation";
 
 export default function PromptName() {
   const { user, setUser } = useContext(userContext);
   const [name, setName] = useState<string>("");
+
+  const searchParams = useSearchParams();
+
+  // Check if URL has an event query parameter
+  // If so, don't show the prompt
+  if (searchParams.get("event")) {
+    return <></>
+  }
 
   // Card that dissappears once name is submitted
   return (

@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { EventDelete } from "@/lib/Events";
 import { createContext } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 function formatTime(time: string): string {
   // Input: "14:30" -> Output: "2:30 PM"
@@ -59,12 +60,38 @@ type EventDialogueProps = Event & {
 const editingContext = createContext<EditingContextType>({} as EditingContextType);
 
 function EventDialogue({ id, title, genre, date, time, location, author, onSuccess }: EventDialogueProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const [open, setOpen] = useState<boolean>(false);
   const [RSVPs, setRSVPs] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [editing, setEditing] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<number>(0);
+
+  // Open dialogue if URL has eventID param matching this event
+  useEffect(() => {
+    if (searchParams.get("event") === id?.toString()) {
+      setOpen(true);
+    }
+  }, [id, searchParams]);
+
+  // Update URL when dialogue is opened/closed
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    if (isOpen) {
+      // Add event id to URL
+      newSearchParams.set("event", id?.toString() || "");
+    }
+    else {
+      // Remove event id from URL
+      newSearchParams.delete("event");
+    }
+    router.replace(`${pathname}?${newSearchParams.toString()}`, { scroll: false });
+  }
 
   // Fetch RSVP tables based on EventID 
   // to feed Spin Wheel and RSVP Cards
@@ -94,7 +121,7 @@ function EventDialogue({ id, title, genre, date, time, location, author, onSucce
     <editingContext.Provider value={{ editing, setEditing }}>
       <Dialog
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={handleOpenChange}
       >
         <DialogTrigger>
           <div className="relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-40 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
