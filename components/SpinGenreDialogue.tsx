@@ -55,7 +55,7 @@ function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string,
           <LoaderPinwheelIcon className="size-10" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit text-transparent">
+      <DialogContent className="min-w-fit bg-accent">
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>
