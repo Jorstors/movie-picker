@@ -11,6 +11,7 @@ import EventDialogue from "@/components/EventDialogue";
 import { createContext, useEffect, useState, Suspense } from "react";
 import type { Event } from "@/lib/types";
 import PromptName from "@/components/PromptName";
+import { Button } from "@/components/ui/button";
 
 type userContextType = {
   user: string;
@@ -27,7 +28,18 @@ function Home() {
 
   useEffect(() => {
     console.log("User context updated:", user);
+    if (user) {
+      localStorage.setItem("user", user);
+    }
   }, [user]);
+
+  // Grab user from local storage on initial load
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
 
   // Fetch events from the database
   useEffect(() => {
@@ -52,7 +64,29 @@ function Home() {
       <main className="min-h-screen w-full grid place-items-center bg-gradient-to-b from-background to-card" >
         <div className="px-5 min-w-xs md:w-3xl lg:w-5xl min-h-screen flex flex-col gap-10 items-center content-start py-20">
           {/* User Name Context */}
-          <PromptName />
+          {!loading && (
+            <PromptName />
+          )
+          }
+
+          {/* Currently Logged In As Info */}
+          <Button
+            className="hover:cursor-pointer"
+            variant="ghost"
+            onClick={() => {
+              setUser("");
+            }}
+            asChild
+          >
+            <div className="fixed top-5 right-5 bg-card/70 backdrop-blur-md px-4 py-2 rounded-full border border-border shadow-md">
+              {user ? (
+                <p className="text-sm">Logged in as <span className="font-medium">{user}</span></p>
+              ) : (
+                <p className="text-sm italic text-muted-foreground">Please enter your name to create or RSVP to events.</p>
+              )}
+            </div>
+
+          </Button>
 
           {/* Tab Bar */}
           <div>
