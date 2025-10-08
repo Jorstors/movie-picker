@@ -17,3 +17,14 @@ CREATE TABLE IF NOT EXISTS rsvps (
   weight INT DEFAULT 1,
   UNIQUE (event_id, author)
 )
+
+CREATE TABLE IF NOT EXISTS event_winners (
+  event_id BIGINT, 
+  FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+  movie VARCHAR(255) NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  radarr_sent_at TIMESTAMPTZ,
+  radarr_status TEXT NOT NULL DEFAULT 'unsent',
+  UNIQUE (event_id), 
+  PRIMARY KEY (event_id, movie)
+)

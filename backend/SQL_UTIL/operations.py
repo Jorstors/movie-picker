@@ -23,6 +23,19 @@ CREATE TABLE IF NOT EXISTS rsvps (
 )
 """
 
+create_event_winners_table = """
+CREATE TABLE IF NOT EXISTS event_winners (
+  event_id BIGINT, 
+  FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+  movie VARCHAR(255) NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  radarr_sent_at TIMESTAMPTZ,
+  radarr_status TEXT NOT NULL DEFAULT 'unsent',
+  UNIQUE (event_id), 
+  PRIMARY KEY (event_id, movie)
+)
+"""
+
 insert_event = """
 INSERT INTO events (title, genre, date, time, location, author)
 VALUES (%s, %s, %s, %s, %s, %s) RETURNING id
@@ -57,4 +70,17 @@ WHERE id = %s
 delete_rsvp_query = """
 DELETE FROM rsvps
 WHERE id = %s
+"""
+
+get_events_within_the_hour = """
+SELECT *
+FROM events
+WHERE TO_TIMESTAMP(date || ' ' || time, 'MM/DD/YYYY HH24:MI')
+BETWEEN (NOW() AT TIME ZONE 'America/Los_Angeles') AND (NOW() AT TIME ZONE 'America/Los_Angeles' + INTERVAL '1 hour')
+AND id NOT IN (SELECT event_id FROM event_winners);
+"""
+
+insert_event_winner = """
+INSERT INTO event_winners (event_id, movie, author, radarr_status)
+VALUES (%s, %s, %s, 'pending');
 """

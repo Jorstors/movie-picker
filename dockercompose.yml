@@ -24,13 +24,25 @@ services:
   # Service to initialize the database schema
   initialize:
     image: jorstors/movie-picker-be:latest
+    restart: "no"
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       MOVIE_PICKER_DB_URL: postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker
     command: ["python", "-m", "backend.SQL_UTIL.init_db"]
-    restart: "no"
+
+  watcher:
+    image: jorstors/movie-picker-be:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      MOVIE_PICKER_DB_URL: postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker
+      MOVIE_PICKER_RADARR_URL: http://192.168.1.223:7878
+      PYTHONUNBUFFERED: 1 # Ensures real-time logging
+    command: ["python", "-m", "backend.watcher"]
 
   backend:
     image: jorstors/movie-picker-be:latest
