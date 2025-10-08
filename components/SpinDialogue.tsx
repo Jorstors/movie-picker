@@ -14,10 +14,12 @@ import { Button } from "./ui/button";
 import type { WheelSegment } from "react-prize-wheel";
 import { LoaderPinwheelIcon } from "lucide-react";
 import { RSVP } from "@/lib/types";
+import { useState } from "react";
 
 
 function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
-
+  const [nextClickClose, setNextClickClose] = useState<boolean>(false);
+  const [wheelOpen, setWheelOpen] = useState<boolean>(false);
   // Fill out segments with RSVP list
   const segments: WheelSegment[] = [];
   if (RSVPs) {
@@ -35,7 +37,7 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
   }
 
   const handleSpinComplete = () => {
-    console.log('Spin complete!');
+    setNextClickClose(true);
   }
 
   return (
@@ -47,19 +49,35 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
       )}
       {
         segments.length > 1 && (
-          <Dialog>
+          <Dialog
+            open={wheelOpen}
+            onOpenChange={(open) => {
+              setWheelOpen(open);
+              if (!open) {
+                setNextClickClose(false);
+              }
+            }}
+          >
             <DialogTrigger asChild>
               <Button variant="default" className="text-lg py-10 min-w-fit w-25 hover:cursor-pointer mt-2 mb-5">
                 <LoaderPinwheelIcon className="size-10" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-transparent border-transparent shadow-none min-w-fit text-transparent">
+            <DialogContent
+              className="min-w-fit bg-accent"
+              onClick={() => {
+                if (nextClickClose) {
+                  setWheelOpen(false);
+                }
+              }}
+            >
               <DialogHeader>
                 <DialogTitle></DialogTitle>
               </DialogHeader>
               <SpinWheel
                 segments={segments}
                 onSpinComplete={handleSpinComplete}
+                disabled={nextClickClose}
                 size={500}
                 showSpinButton={false}
               />
