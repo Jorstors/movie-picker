@@ -27,6 +27,8 @@ create_event_winners_table = """
 CREATE TABLE IF NOT EXISTS event_winners (
   event_id BIGINT, 
   FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+  rsvp_id BIGINT, 
+  FOREIGN KEY (rsvp_id) REFERENCES rsvps(id) ON DELETE CASCADE,
   movie VARCHAR(255) NOT NULL,
   author VARCHAR(255) NOT NULL,
   radarr_sent_at TIMESTAMPTZ,
@@ -81,6 +83,10 @@ AND id NOT IN (SELECT event_id FROM event_winners);
 """
 
 insert_event_winner = """
-INSERT INTO event_winners (event_id, movie, author, radarr_status)
-VALUES (%s, %s, %s, 'pending');
+INSERT INTO event_winners (event_id, rsvp_id, movie, author)
+VALUES (%s, %s, %s, %s);
+"""
+
+get_event_winner_query = """
+SELECT * FROM event_winners WHERE event_id = %s
 """

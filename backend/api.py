@@ -6,6 +6,7 @@ from psycopg.sql import SQL, Identifier
 # psycopg using dict row factory
 from .SQL_UTIL.db import POOL
 from .SQL_UTIL.operations import (
+    get_event_winner_query,
     get_rsvps_for_event,
     insert_event,
     insert_rsvp,
@@ -222,3 +223,18 @@ def patch_rsvp(rsvp_id: int, rsvp: RSVPPatch):
     return JSONResponse(
         content={"message": f"RSVP {rsvp_id} patched", "updated_fields": cols}
     )
+
+
+@app.get("/api/events/winner/{event_id}")
+def get_event_winner(event_id: int):
+    with POOL.connection() as conn:
+        with conn.cursor() as cur:
+            _ = cur.execute(get_event_winner_query, (event_id,))
+            winner = cur.fetchone()
+            if not winner:
+                return JSONResponse(
+                    status_code=404,
+                    content={"message": f"No winner found for event {event_id}"},
+                )
+            rsvp_winner_id = winner["rsvp_id"] if winner else None
+    return JSONResponse(content={"rsvp_winner_id": rsvp_winner_id})

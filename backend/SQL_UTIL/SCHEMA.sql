@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS rsvps (
 CREATE TABLE IF NOT EXISTS event_winners (
   event_id BIGINT, 
   FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+  rsvp_id BIGINT, 
+  FOREIGN KEY (rsvp_id) REFERENCES rsvps(id) ON DELETE CASCADE,
   movie VARCHAR(255) NOT NULL,
   author VARCHAR(255) NOT NULL,
   radarr_sent_at TIMESTAMPTZ,

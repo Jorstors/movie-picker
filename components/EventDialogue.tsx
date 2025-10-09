@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { EventDelete } from "@/lib/Events";
+import { checkEventWinner, EventDelete } from "@/lib/Events";
 import { createContext } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -80,10 +80,15 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
   const [RSVPs, setRSVPs] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [editing, setEditing] = useState<boolean>(false);
+  const [rsvp_winner_id, setRsvp_winner_id] = useState<number | undefined>(undefined);
   const [refresh, setRefresh] = useState<number>(0);
 
   const [localTime, setLocalTime] = useState<string>(time);
   const [localDate, setLocalDate] = useState<Date>(new Date(date));
+
+  useEffect(() => {
+    console.log("rsvp_winner_id updated:", rsvp_winner_id);
+  }, [rsvp_winner_id]);
 
   // Sync local time and date with props
   useEffect(() => {
@@ -169,7 +174,21 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
         setLoading(false);
       }
     }
+    const fetchEventWinner = async () => {
+      try {
+        if (!id) return;
+        const winner_id = await checkEventWinner(id);
+        setRsvp_winner_id(winner_id);
+      }
+      catch (error) {
+        console.error("Error checking event winner:", error);
+        return;
+      }
+    }
+
     fetchRSVPs();
+    fetchEventWinner();
+
   }, [id, open, refresh]);
 
   return (
@@ -224,6 +243,7 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
             </Badge>
             <SpinDialogue
               RSVPs={RSVPs}
+              rsvp_winner_id={rsvp_winner_id}
             />
             <AddEditMovies
               id={id}

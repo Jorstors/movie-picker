@@ -63,7 +63,12 @@ def main():
                         # Insert into event_winners table
                         _ = cur.execute(
                             insert_event_winner,
-                            (event_id, chosen_rsvp["movie"], chosen_rsvp["author"]),
+                            (
+                                event_id,
+                                chosen_rsvp["id"],
+                                chosen_rsvp["movie"],
+                                chosen_rsvp["author"],
+                            ),
                         )
                         print(
                             f"[watcher] Inserted event winner for event {event_id}: {chosen_rsvp['movie']} by {chosen_rsvp['author']}"

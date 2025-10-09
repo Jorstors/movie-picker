@@ -16,8 +16,12 @@ import { LoaderPinwheelIcon } from "lucide-react";
 import { RSVP } from "@/lib/types";
 import { useState } from "react";
 
+type spinDialogueProps = {
+  RSVPs: RSVP[];
+  rsvp_winner_id: number | undefined;
+}
 
-function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
+function SpinDialogue({ RSVPs, rsvp_winner_id }: spinDialogueProps) {
   const [nextClickClose, setNextClickClose] = useState<boolean>(false);
   const [wheelOpen, setWheelOpen] = useState<boolean>(false);
   // Fill out segments with RSVP list
@@ -35,6 +39,10 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
       });
     });
   }
+
+  console.log("segments: ", segments);
+  console.log("rsvp_winner_id (string): ", rsvp_winner_id?.toString());
+  console.log("segment_winner", segments.find(s => s.id === rsvp_winner_id?.toString()));
 
   const handleSpinComplete = () => {
     setNextClickClose(true);
@@ -79,6 +87,7 @@ function SpinDialogue({ RSVPs }: { RSVPs: RSVP[] }) {
                 onSpinComplete={handleSpinComplete}
                 disabled={nextClickClose}
                 size={500}
+                predefinedResult={rsvp_winner_id ? rsvp_winner_id.toString() : undefined}
                 showSpinButton={false}
               />
               <DialogDescription className="text-transparent">Spin Picker For Movies</DialogDescription>

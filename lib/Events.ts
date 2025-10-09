@@ -66,5 +66,27 @@ async function EventCreate(event: Event) {
 
 }
 
+async function checkEventWinner(event_id: number) {
+  try {
+    const response = await fetch(`/api/events/winner/${event_id}`)
+    if (response.ok) {
+      const data = await response.json();
+      const rsvp_winner_id = data["rsvp_winner_id"];
+
+      if (rsvp_winner_id) {
+        return rsvp_winner_id;
+      }
+    }
+    else if (response.status === 404) {
+      console.log("Event has no winner yet.");
+      return undefined;
+    }
+  }
+  catch (error) {
+    console.error("Error checking event winner:", error);
+    return;
+  }
+}
+
 export default EventFetch;
-export { EventDelete, EventCreate };
+export { EventDelete, EventCreate, checkEventWinner };

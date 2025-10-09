@@ -28,8 +28,6 @@ function RSVPCards({ RSVPs, onSuccess }: RSVPCardsProps) {
   const [disabled, setDisabled] = useState<boolean>(false);
   const [weightDisabled, setWeightDisabled] = useState<boolean>(false);
 
-  console.log("RSVPCards - RSVPs: ", RSVPs);
-
   const updateWeight = async (rsvp_id: number, weight: number, increment: boolean) => {
     if (weight <= 1 && !increment) return; // Prevent weight from going below 1
     setWeightDisabled(true);

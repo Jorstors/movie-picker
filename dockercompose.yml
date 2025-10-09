@@ -38,6 +38,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      initialize:
+        condition: service_completed_successfully
     environment:
       MOVIE_PICKER_DB_URL: postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker
       MOVIE_PICKER_RADARR_URL: http://192.168.1.223:7878
