@@ -27,11 +27,13 @@ function SpinDialogue({ RSVPs, rsvp_winner_id }: spinDialogueProps) {
   // Fill out segments with RSVP list
   const segments: WheelSegment[] = [];
   if (RSVPs) {
-    RSVPs.forEach((rsvp) => {
-      // Assign a color based on index (hex colors)
-      const randomColor = Math.floor(Math.random() * 16777215);
-      let hexColor = randomColor.toString(16);
-      hexColor = '#' + hexColor.padStart(6, '0');
+    const hexColors: string[] = [
+      "#FF5733", "#33FF57", "#3357FF", "#F333FF", "#33FFF5", "#F5FF33",
+      "#FF33A8", "#A833FF", "#33FFA8", "#FFA833", "#33A8FF", "#A8FF33"
+    ]
+    RSVPs.forEach((rsvp, index) => {
+      // Assign a color based on index
+      const hexColor = hexColors[index % hexColors.length];
       // id, text(movie name), and color
       if (!rsvp.rsvp_id) return; // Skip if rsvp_id is undefined
       segments.push({
