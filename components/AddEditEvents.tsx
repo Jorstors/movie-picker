@@ -87,14 +87,25 @@ function AddEdit({ onSuccess }: { onSuccess: () => void }) {
 
 
   const genres: { id: string, text: string }[] = [
-    { id: "1", text: "Action" },
-    { id: "2", text: "Comedy" },
-    { id: "3", text: "Drama" },
-    { id: "4", text: "Horror" },
-    { id: "5", text: "Romance" },
-    { id: "6", text: "Sci-Fi" },
-    { id: "7", text: "Thriller" },
-    { id: "8", text: "Fantasy" }
+    { id: "1", text: "Comedy" },
+    { id: "2", text: "Action" },
+    { id: "3", text: "Science Fiction" },
+    { id: "4", text: "Thriller" },
+    { id: "5", text: "Animation" },
+    { id: "6", text: "Adventure" },
+    { id: "7", text: "Documentary" },
+    { id: "8", text: "Crime" },
+    { id: "9", text: "Horror" },
+    { id: "10", text: "Sports" },
+    { id: "11", text: "Romance" },
+    { id: "12", text: "Fantasy" },
+    { id: "13", text: "Family" },
+    { id: "14", text: "Mystery" },
+    { id: "15", text: "Western" },
+    { id: "16", text: "Musical" },
+    { id: "17", text: "War" },
+    { id: "18", text: "History" },
+    { id: "19", text: "TV Movie" },
   ]
   return (
     <div className="w-full h-15 flex gap-4 items-center content-center">
