@@ -50,13 +50,13 @@ def main():
                         # Pick a winner based on weights
                         import random
 
-                        rsvp_ids = [rsvp["id"] for rsvp in rsvps]
+                        rsvp_ids = [rsvp["rsvp_id"] for rsvp in rsvps]
                         weights = [rsvp["weight"] for rsvp in rsvps]
 
                         chosen_rsvp_id = random.choices(rsvp_ids, weights, k=1)[0]
                         print(f"[watcher] Chosen RSVP ID: {chosen_rsvp_id}")
                         chosen_rsvp = next(
-                            rsvp for rsvp in rsvps if rsvp["id"] == chosen_rsvp_id
+                            rsvp for rsvp in rsvps if rsvp["rsvp_id"] == chosen_rsvp_id
                         )
                         print(f"[watcher] Chosen RSVP: {chosen_rsvp}")
 
@@ -65,7 +65,7 @@ def main():
                             insert_event_winner,
                             (
                                 event_id,
-                                chosen_rsvp["id"],
+                                chosen_rsvp["rsvp_id"],
                                 chosen_rsvp["movie"],
                                 chosen_rsvp["author"],
                             ),

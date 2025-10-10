@@ -35,7 +35,7 @@ function AddEditMovies({ id, onSuccess }: { id?: number, onSuccess: () => void }
       return;
     }
     const rsvp: RSVP = {
-      id: id.toString(),
+      event_id: id.toString(),
       author: name,
       movie: movie,
     }

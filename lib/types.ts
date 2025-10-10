@@ -11,7 +11,7 @@ export type Event = {
 
 export type RSVP = {
   rsvp_id?: number;
-  id: string;
+  event_id: string;
   author: string;
   movie: string;
   weight?: number;

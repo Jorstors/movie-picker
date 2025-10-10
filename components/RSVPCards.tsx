@@ -104,7 +104,7 @@ function RSVPCards({ RSVPs, onSuccess }: RSVPCardsProps) {
 
             )}
             <div
-              key={rsvp.id}
+              key={rsvp.event_id}
               className="w-full min-h-20 flex flex-row gap-2 items-center content-between text-center bg-card-foreground/10 rounded-lg p-3"
             >
               <p>

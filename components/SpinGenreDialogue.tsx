@@ -9,40 +9,31 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { SpinWheel } from "react-prize-wheel";
 import { Button } from "./ui/button";
-import type { SpinResult, WheelSegment } from "react-prize-wheel";
 import { LoaderPinwheelIcon } from "lucide-react";
+import PrizeWheel, { PrizeWheelSegment } from "./WheelComponent";
+import { useMemo } from "react";
+import { indexToColor } from "./SpinDialogue";
+import theme from "@/lib/wheelTheme";
 
 
 function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string, text: string }[], setSelectedGenre: React.Dispatch<React.SetStateAction<string>> }) {
 
   // Fill out segments with RSVP list
-  let segments: WheelSegment[] = [];
-  if (genres) {
-    genres.forEach((rsvp) => {
-      // Assign a color based on index (hex colors)
-      const randomColor = Math.floor(Math.random() * 16777215);
-      let hexColor = randomColor.toString(16);
-      hexColor = '#' + hexColor.padStart(6, '0');
-      // id, text(movie name), and color
-      segments.push({
-        id: rsvp.id, text: rsvp.text, color: hexColor
-      });
-    });
-  }
+  const segments: PrizeWheelSegment[] = useMemo(() => {
+    if (!genres.length) return [];
+    return genres
+      .map((genre) => ({
+        id: genre.id,
+        label: genre.text,
+        weight: 1,
+        color: indexToColor(parseInt(genre.id))
+      }) as PrizeWheelSegment);
+  }, [genres]);
 
-  // If no RSVPs, show placeholder segments
-  if (segments.length === 0) {
-    segments = [
-      { id: '1', text: 'No RSVPs Yet', color: '#d3d3d3' },
-      { id: '2', text: 'No RSVPs Yet', color: '#a9a9a9' },
-    ]
-  }
-
-  const handleSpinComplete = (result: SpinResult) => {
-    console.log('Spin complete! Result:', result);
-    const movie = result.segment.text;
+  const handleSpinComplete = (winner: { id: string, label: string, index: number }) => {
+    console.log('Spin complete! Result:', winner);
+    const movie = winner.label;
     console.log("Selected Genre: ", movie);
     setSelectedGenre(movie);
   }
@@ -55,16 +46,19 @@ function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string,
           <LoaderPinwheelIcon className="size-10" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-fit bg-accent">
+      <DialogContent className="min-w-fit">
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>
-        <SpinWheel
-          segments={segments}
-          onSpinComplete={handleSpinComplete}
-          size={300}
-          showSpinButton={false}
-        />
+        <div className="w-full h-fit flex items-center justify-center">
+          <PrizeWheel
+            key={JSON.stringify(segments)}
+            segments={segments}
+            onSpinEnd={handleSpinComplete}
+            theme={theme}
+            hoverGlow={false}
+          />
+        </div>
         <DialogDescription className="text-transparent">Spin Picker For Genres</DialogDescription>
       </DialogContent>
     </Dialog>

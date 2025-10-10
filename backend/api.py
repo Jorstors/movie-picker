@@ -38,7 +38,7 @@ class EventPatch(BaseModel):
 
 
 class RSVP(BaseModel):
-    id: int
+    event_id: int
     movie: str
     author: str
     weight: int | None = 1
@@ -111,14 +111,13 @@ async def create_event(event: Event):
 async def rsvp_event(RSVP: RSVP):
     with POOL.connection() as conn:
         with conn.cursor() as cur:
-            _ = cur.execute(insert_rsvp, (RSVP.id, RSVP.author, RSVP.movie))
+            _ = cur.execute(insert_rsvp, (RSVP.event_id, RSVP.author, RSVP.movie))
+            # Returns the rsvp_id of the newly created RSVP
             res = cur.fetchone()
             rsvp_id = res["id"] if res else -1
-    # TODO:
-    # USE WILL's API KEY FOR RADARR DOWNLOAD ON HIS SERVER
     return JSONResponse(
         content={
-            "message": f"RSVP for event {RSVP.id} created successfully with id {rsvp_id}"
+            "message": f"RSVP for event {RSVP.event_id} created successfully with id {rsvp_id}"
         }
     )
 
