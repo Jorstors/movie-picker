@@ -650,12 +650,15 @@ const PrizeWheel = forwardRef(function PrizeWheel(
           {/* Tick / Needle at top */}
           {tick?.show !== false && (
             <g>
-              <circle cx={cx} cy={cy - outerR - tickSize * 0.1} r={tickSize * 0.5} fill={theme.centerFill ?? DEFAULTS.THEME.centerFill} />
+              {/* triangle tip inside the wheel */}
               <path
                 d={[
-                  `M ${cx} ${cy - outerR - tickSize * 0.5}`,
-                  `L ${cx - tickSize * 0.7} ${cy - outerR + tickSize * 0.9}`,
-                  `L ${cx + tickSize * 0.7} ${cy - outerR + tickSize * 0.9}`,
+                  // TIP (inside the wheel a bit)
+                  `M ${cx} ${cy - outerR + tickSize * 0.6}`,
+                  // LEFT base point (above the rim)
+                  `L ${cx - tickSize * 0.7} ${cy - outerR - tickSize * 0.9}`,
+                  // RIGHT base point (above the rim)
+                  `L ${cx + tickSize * 0.7} ${cy - outerR - tickSize * 0.9}`,
                   "Z",
                 ].join(" ")}
                 fill={theme.tickColor ?? DEFAULTS.THEME.tickColor}
