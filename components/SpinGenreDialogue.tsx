@@ -50,13 +50,14 @@ function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string,
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>
-        <div className="w-full h-fit flex items-center justify-center">
+        <div className="min-w-fit min-h-fit flex items-center justify-center">
           <PrizeWheel
             key={JSON.stringify(segments)}
             segments={segments}
             onSpinEnd={handleSpinComplete}
             theme={theme}
             hoverGlow={false}
+            size={900}
           />
         </div>
         <DialogDescription className="text-transparent">Spin Picker For Genres</DialogDescription>

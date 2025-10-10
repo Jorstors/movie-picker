@@ -106,7 +106,7 @@ function SpinDialogue({ RSVPs, rsvp_winner_id }: spinDialogueProps) {
                 <DialogTitle></DialogTitle>
               </DialogHeader>
 
-              <div className="w-full h-fit flex items-center justify-center p-10">
+              <div className="min-w-fit min-h-fit flex items-center justify-center">
                 <PrizeWheel
                   key={spinWheelKey}
                   segments={segments}
@@ -115,6 +115,7 @@ function SpinDialogue({ RSVPs, rsvp_winner_id }: spinDialogueProps) {
                   disabled={nextClickClose}
                   theme={theme}
                   hoverGlow={false}
+                  size={900}
                 />
 
               </div>

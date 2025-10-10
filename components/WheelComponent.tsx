@@ -321,6 +321,20 @@ const PrizeWheel = forwardRef(function PrizeWheel(
   const targetAngleRef = useRef<number>(0);
   const durationRef = useRef<number>(spinDurationMs);
 
+  // Responsive "box" size (square). Defaults to the provided `size` prop.
+  const [boxSize, setBoxSize] = useState(size);
+
+  // Responsive helper: shrink from the `size` prop on smaller viewports
+  const calcResponsiveSize = (vw: number, base: number) => {
+    // tweak the breakpoints/numbers if you like
+    if (vw <= 380) return Math.min(base, 260);
+    if (vw <= 640) return Math.min(base, 300);
+    if (vw <= 900) return Math.min(base, 360);
+    if (vw <= 1280) return Math.min(base, 400);
+    return base; // desktop: use the prop as-is
+  };
+
+
   // Cleanup rAF
   useEffect(() => {
     return () => {
@@ -451,8 +465,8 @@ const PrizeWheel = forwardRef(function PrizeWheel(
   // Visuals
   const baseStyle: React.CSSProperties = {
     position: "relative",
-    width: size,
-    height: size,
+    width: boxSize,
+    height: boxSize,
     display: "inline-block",
     userSelect: "none",
     outline: "none",
@@ -517,6 +531,18 @@ const PrizeWheel = forwardRef(function PrizeWheel(
   // Accessibility roles/labels
   const role = "group";
   const ariaBusy = isSpinning ? true : undefined;
+
+  useEffect(() => {
+    // SSR-safe
+    if (typeof window === "undefined") {
+      setBoxSize(size);
+      return;
+    }
+    const update = () => setBoxSize(calcResponsiveSize(window.innerWidth, size));
+    update(); // initial
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [size]);
 
   return (
     <div
