@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 from time import sleep
 import random
+import requests
 
 # psycopg using dict row factory
 from .SQL_UTIL.db import POOL
@@ -48,8 +49,6 @@ def main():
                     print(f"[watcher] Found {len(rsvps)} RSVPs for event {event_id}")
                     if rsvps:
                         # Pick a winner based on weights
-                        import random
-
                         rsvp_ids = [rsvp["rsvp_id"] for rsvp in rsvps]
                         weights = [rsvp["weight"] for rsvp in rsvps]
 
@@ -74,12 +73,126 @@ def main():
                             f"[watcher] Inserted event winner for event {event_id}: {chosen_rsvp['movie']} by {chosen_rsvp['author']}"
                         )
 
-                        # Send a radarr request to add the movie to the library
-                        radarr_url = os.environ.get("MOVIE_PICKER_RADARR_URL")
-                        radarr_api_key = os.environ.get("MOVIE_PICKER_RADARR_API_KEY")
+                        # ======== Send Radarr request to add the movie to the library ========
+
+                        try:
+                            # Grab Radarr URL and API key from environment variables
+                            radarr_url = os.environ.get("MOVIE_PICKER_RADARR_URL")
+                            radarr_api_key = os.environ.get(
+                                "MOVIE_PICKER_RADARR_API_KEY"
+                            )
+
+                            if not radarr_url or not radarr_api_key:
+                                print(
+                                    "[watcher] Radarr URL or API key not set in environment variables"
+                                )
+                                continue
+
+                            # Build and send the Radarr lookup request for movie data
+                            radarr_lookup_endpoint = f"{radarr_url}/api/v3/movie/lookup"
+                            params = {
+                                "term": chosen_rsvp["movie"],
+                                "apikey": radarr_api_key,
+                            }
+                            print(
+                                f"[watcher] Radarr looking up movie: {params['term']}"
+                            )
+                            lookup_response = requests.get(
+                                radarr_lookup_endpoint,
+                                params=params,
+                            )
+
+                            if not lookup_response.ok:
+                                print(
+                                    f"[watcher] Radarr lookup failed: {lookup_response.status_code} - {lookup_response.text}"
+                                )
+                                continue
+
+                            results = lookup_response.json()
+                            print(
+                                f"[watcher] Radarr lookup response: {lookup_response.status_code} - {results[0] if results else 'No results found'}"
+                            )
+
+                            if not results:
+                                print("[watcher] No results found in Radarr lookup")
+                                continue
+
+                            # Prioritize the first fuzzy result and its TMDB ID
+                            res_movie_obj = results[0]
+                            first_result_imdb_id = res_movie_obj.get("tmdbId")
+
+                            print(
+                                f"[watcher] First result TMDB ID: {first_result_imdb_id}"
+                            )
+
+                            # Get the root folder path from Radarr
+                            root_folder_path = get_root_folder(
+                                radarr_url, radarr_api_key
+                            )
+
+                            # Send the add movie request to Radarr with the TMDB ID
+                            params = {"apikey": radarr_api_key}
+                            request_body = {
+                                "title": res_movie_obj.get("title"),
+                                "year": res_movie_obj.get("year"),
+                                "tmdbId": res_movie_obj.get("tmdbId"),
+                                "qualityProfileId": 4,  # HD-1080p
+                                "monitored": True,
+                                "minimumAvailability": "released",
+                                "isAvailable": res_movie_obj.get("isAvailable"),
+                                "addOptions": {"searchForMovie": True},
+                                "rootFolderPath": root_folder_path,
+                            }
+
+                            radarr_add_endpoint = f"{radarr_url}/api/v3/movie"
+                            add_response = requests.post(
+                                radarr_add_endpoint,
+                                params=params,
+                                json=request_body,
+                            )
+
+                            if not add_response.ok:
+                                print(
+                                    f"[watcher] Radarr add movie failed: {add_response.status_code} - {add_response.text}"
+                                )
+                                continue
+
+                            print(
+                                f"[watcher] Radarr add movie response: {add_response.status_code} - {add_response.text}"
+                            )
+
+                        except Exception as e:
+                            print(f"[watcher] Error sending Radarr request: {e}")
+                            continue
 
         # Sleep for a few seconds to avoid busy waiting
         sleep(10)
+
+
+def get_root_folder(radarr_url: str, radarr_api_key: str):
+    try:
+        # Send a radarr request to add the movie to the library
+        if radarr_url and radarr_api_key:
+            radarr_endpoint = f"{radarr_url}/api/v3/rootfolder"
+            params = {
+                "apikey": radarr_api_key,
+            }
+            response = requests.get(
+                radarr_endpoint,
+                params=params,
+            )
+
+            if response.ok:
+                results = response.json()
+                root_folder_path = results[0].get("path")
+                print(
+                    f"[watcher] [get_root_folder] Root folder path: {root_folder_path}"
+                )
+
+                return root_folder_path
+
+    except Exception as e:
+        print(f"[watcher] [get_root_folder] Error sending Radarr request: {e}")
 
 
 if __name__ == "__main__":
