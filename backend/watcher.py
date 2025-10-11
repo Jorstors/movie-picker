@@ -138,7 +138,7 @@ def main():
                                 "title": res_movie_obj.get("title"),
                                 "year": res_movie_obj.get("year"),
                                 "tmdbId": res_movie_obj.get("tmdbId"),
-                                "qualityProfileId": 4,  # HD-1080p
+                                "qualityProfileId": 5,  # 4K UHD or next highest available
                                 "monitored": True,
                                 "minimumAvailability": "released",
                                 "isAvailable": res_movie_obj.get("isAvailable"),
