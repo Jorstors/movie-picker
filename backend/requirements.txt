@@ -1,2 +1,3 @@
 fastapi[standard,cli]
 psycopg[binary,pool]
+requests

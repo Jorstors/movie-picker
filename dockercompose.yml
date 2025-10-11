@@ -42,7 +42,8 @@ services:
         condition: service_completed_successfully
     environment:
       MOVIE_PICKER_DB_URL: postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker
-      MOVIE_PICKER_RADARR_URL: http://192.168.1.223:7878
+      MOVIE_PICKER_RADARR_URL: ${MOVIE_PICKER_RADARR_URL?err}
+      MOVIE_PICKER_RADARR_API_KEY: ${MOVIE_PICKER_RADARR_API_KEY?err}
       PYTHONUNBUFFERED: 1 # Ensures real-time logging
     command: ["python", "-m", "backend.watcher"]
 

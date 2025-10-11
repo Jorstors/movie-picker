@@ -86,6 +86,8 @@ def main():
                                 print(
                                     "[watcher] Radarr URL or API key not set in environment variables"
                                 )
+                                print(f"[watcher] Radarr URL: {radarr_url}")
+                                print(f"[watcher] Radarr API Key: {radarr_api_key}")
                                 continue
 
                             # Build and send the Radarr lookup request for movie data
