@@ -155,6 +155,7 @@ def main():
                                 print(
                                     f"[watcher] Radarr add movie failed: {add_response.status_code} - {add_response.text}"
                                 )
+                                continue
 
                             print(
                                 f"[watcher] Radarr add movie response: {add_response.status_code} - {add_response.text}"
