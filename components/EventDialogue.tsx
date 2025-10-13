@@ -206,11 +206,11 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
             <Badge variant="default" className="sm:absolute bottom-0 right-0 p-2 m-5 text-sm">{author}</Badge>
           </div>
         </DialogTrigger>
-        <DialogContent className="max-w-fit min-w-fit overflow-y-scroll scrollbar-hidden">
+        <DialogContent className="overflow-y-scroll scrollbar-hidden">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
-          <div className="min-w-xs w-[50vw] h-[70vh] rounded-lg p-5 mx-auto flex flex-col items-center gap-5">
+          <div className="w-full h-[70vh] rounded-lg flex flex-col items-center gap-5">
             <Badge variant="outline" className="w-full sm:text-lg text-center  ">
               <p>
                 {`${date} : ${formatTime(time)}`}

@@ -46,11 +46,13 @@ function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string,
           <LoaderPinwheelIcon className="size-10" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-fit">
+      <DialogContent
+        className="flex flex-col items-center content-center overflow-y-scroll scrollbar-hidden"
+      >
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>
-        <div className="min-w-fit min-h-fit flex items-center justify-center">
+        <div className="w-full h-fit max-h-screen rounded-lg flex flex-col items-center gap-5">
           <PrizeWheel
             key={JSON.stringify(segments)}
             segments={segments}

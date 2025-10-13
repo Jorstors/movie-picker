@@ -116,7 +116,7 @@ function AddEdit({ onSuccess }: { onSuccess: () => void }) {
           </Button>
         </DialogTrigger>
         <DialogContent
-          className="min-w-md flex flex-col items-center content-center p-15"
+          className="flex flex-col items-center content-center overflow-y-scroll scrollbar-hidden"
           onKeyDown={(e) => {
             if (e.key === "Enter" && !disabled) {
               handleCreateEvent();
@@ -126,46 +126,48 @@ function AddEdit({ onSuccess }: { onSuccess: () => void }) {
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Add New Event</DialogTitle>
           </DialogHeader>
-          <p className="mb-2 underline-offset-2 underline">Spin to Select Genre</p>
-          <SpinGenreDialogue
-            genres={genres}
-            setSelectedGenre={setSelectedGenre}
-          />
-          <p className="italic">{selectedGenre}</p>
-          <TimePicker
-            date={date}
-            setDate={setDate}
-            setTime={setTime}
-          />
-          <Input
-            placeholder="Event Location"
-            className="w-full mt-2"
-            value={location}
-            disabled={disabled}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-          <Input
-            placeholder="Event Title"
-            className="w-full"
-            value={title}
-            disabled={disabled}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Input
-            placeholder="What's your name?"
-            className="w-full mb-5"
-            value={author}
-            disabled={disabled}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-          <Button
-            className="w-full hover:cursor-pointer"
-            onClick={handleCreateEvent}
-            disabled={disabled}
-          >
-            Create Event
-          </Button>
-          <DialogDescription className="text-transparent">Add Event</DialogDescription>
+          <div className="w-full h-[70vh] rounded-lg flex flex-col items-center gap-5">
+            <p className="mb-2 underline-offset-2 underline">Spin to Select Genre</p>
+            <SpinGenreDialogue
+              genres={genres}
+              setSelectedGenre={setSelectedGenre}
+            />
+            <p className="italic">{selectedGenre}</p>
+            <TimePicker
+              date={date}
+              setDate={setDate}
+              setTime={setTime}
+            />
+            <Input
+              placeholder="Event Location"
+              className="w-full mt-2"
+              value={location}
+              disabled={disabled}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+            <Input
+              placeholder="Event Title"
+              className="w-full"
+              value={title}
+              disabled={disabled}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <Input
+              placeholder="What's your name?"
+              className="w-full mb-5"
+              value={author}
+              disabled={disabled}
+              onChange={(e) => setAuthor(e.target.value)}
+            />
+            <Button
+              className="w-full hover:cursor-pointer"
+              onClick={handleCreateEvent}
+              disabled={disabled}
+            >
+              Create Event
+            </Button>
+            <DialogDescription className="text-transparent">Add Event</DialogDescription>
+          </div>
         </DialogContent>
       </Dialog>
     </div >
