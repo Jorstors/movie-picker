@@ -17,7 +17,7 @@ import type { RSVP } from "@/lib/types";
 import RSVPsFetch from "@/lib/RSVPs";
 import { useState, useEffect, Suspense } from "react";
 import { Button } from "./ui/button";
-import { PencilIcon, Trash2Icon } from "lucide-react";
+import { CalendarIcon, HomeIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -198,11 +198,17 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
         onOpenChange={handleOpenChange}
       >
         <DialogTrigger>
-          <div className="relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-40 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
+          <div className="sm:relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-60 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
             <h1 className="text-xl font-bold">{title}</h1>
             <Badge className="text-sm" variant="secondary">{genre}</Badge>
-            <p className="sm:absolute top-0 right-0 m-5">{date} : {formatTime(time)}</p>
-            <p className="sm:absolute bottom-0 left-0 m-5">{location}</p>
+            <p className="sm:absolute top-0 right-0 m-5 flex flex-col items-center gap-2 text-start">
+              <CalendarIcon className="self-start sm:self-end" />
+              {date} : {formatTime(time)}
+            </p>
+            <p className="sm:absolute bottom-0 left-0 m-5 flex flex-col items-center gap-2 text-start">
+              <HomeIcon className="self-start" />
+              {location}
+            </p>
             <Badge variant="default" className="sm:absolute bottom-0 right-0 p-2 m-5 text-sm">{author}</Badge>
           </div>
         </DialogTrigger>
@@ -211,7 +217,7 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
           <div className="w-full h-[70vh] rounded-lg flex flex-col items-center gap-5">
-            <Badge variant="outline" className="w-full sm:text-lg text-center  ">
+            <Badge variant="outline" className="w-full sm:text-lg text-center">
               <p>
                 {`${date} : ${formatTime(time)}`}
               </p>
