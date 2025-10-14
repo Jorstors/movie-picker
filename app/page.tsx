@@ -8,10 +8,11 @@ import EventFetch from "@/lib/Events";
 import TabBar from "@/components/TabBar";
 import AddEdit from "@/components/AddEditEvents";
 import EventDialogue from "@/components/EventDialogue";
-import { createContext, useEffect, useState, Suspense } from "react";
+import { createContext, useEffect, useState, Suspense, useContext } from "react";
 import type { Event } from "@/lib/types";
 import PromptName from "@/components/PromptName";
 import { Button } from "@/components/ui/button";
+import { EventContext } from "@/lib/EventProvider";
 
 type userContextType = {
   user: string;
@@ -21,7 +22,7 @@ type userContextType = {
 const userContext = createContext<userContextType>({} as userContextType);
 
 function Home() {
-  const [events, setEvents] = useState<Event[]>([]);
+  const { events, setEvents } = useContext(EventContext);
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState("");
   const [refresh, setRefresh] = useState<number>(0);

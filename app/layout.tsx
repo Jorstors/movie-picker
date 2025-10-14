@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import EventProvider from "@/lib/EventProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,7 +34,9 @@ export default function RootLayout({
       >
         {/* Only render dark theme */}
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {children}
+          <EventProvider>
+            {children}
+          </EventProvider>
         </ThemeProvider>
       </body>
     </html>
