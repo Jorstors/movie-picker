@@ -538,7 +538,7 @@ const PrizeWheel = forwardRef(function PrizeWheel(
       setBoxSize(size);
       return;
     }
-    const update = () => setBoxSize(calcResponsiveSize(window.innerWidth, size));
+    const update = () => setBoxSize(calcResponsiveSize(window.innerHeight, size));
     update(); // initial
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);

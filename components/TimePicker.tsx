@@ -16,7 +16,7 @@ export function TimePicker({ date, time, setDate, setTime }: { date: Date, setDa
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="flex gap-4 mt-10">
+    <div className="max-w-full flex flex-wrap gap-4 mt-10 justify-center">
       <div className="flex flex-col gap-3">
         <Label htmlFor="date-picker" className="px-1">
           Date

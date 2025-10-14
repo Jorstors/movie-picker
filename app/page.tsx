@@ -78,11 +78,11 @@ function Home() {
             }}
             asChild
           >
-            <div className="fixed top-5 right-5 bg-card/70 backdrop-blur-md px-4 py-2 rounded-full border border-border shadow-md">
+            <div className="bg-card/70 backdrop-blur-md px-4 py-2 rounded-full border border-border shadow-md w-full">
               {user ? (
                 <p className="text-sm">Logged in as <span className="font-medium">{user}</span></p>
               ) : (
-                <p className="text-sm italic text-muted-foreground">Please enter your name to create or RSVP to events.</p>
+                <p className="text-sm italic text-muted-foreground text-wrap text-center">Please enter your name to create or RSVP to events.</p>
               )}
             </div>
 

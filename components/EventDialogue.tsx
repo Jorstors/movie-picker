@@ -198,7 +198,7 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
         onOpenChange={handleOpenChange}
       >
         <DialogTrigger>
-          <div className="sm:relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-[70vw] sm:w-[70vw] md:w-[45vw] min-h-60 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
+          <div className="sm:relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-full sm:w-[70vw] md:w-[45vw] min-h-60 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
             <h1 className="text-xl font-bold">{title}</h1>
             <Badge className="text-sm" variant="secondary">{genre}</Badge>
             <p className="sm:absolute top-0 right-0 m-5 flex flex-col items-center gap-2 text-start">
@@ -230,7 +230,7 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
                     <PencilIcon />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-fit">
+                <PopoverContent className="w-full">
                   <h1 className="font-bold">Edit Date & Time</h1>
                   <TimePicker
                     time={localTime}

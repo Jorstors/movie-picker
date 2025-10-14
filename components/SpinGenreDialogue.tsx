@@ -47,7 +47,7 @@ function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string,
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="flex flex-col items-center content-center overflow-y-scroll scrollbar-hidden"
+        className="flex flex-col items-center content-center"
       >
         <DialogHeader>
           <DialogTitle></DialogTitle>

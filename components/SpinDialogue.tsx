@@ -95,7 +95,7 @@ function SpinDialogue({ RSVPs, rsvp_winner_id }: spinDialogueProps) {
               </Button>
             </DialogTrigger>
             <DialogContent
-              className="flex flex-col items-center content-center overflow-y-scroll scrollbar-hidden"
+              className="flex flex-col items-center content-center"
               onClick={() => {
                 if (nextClickClose) {
                   setWheelOpen(false);
