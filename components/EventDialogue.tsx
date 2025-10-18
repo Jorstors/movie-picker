@@ -217,6 +217,7 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
           <div className="w-full h-[70vh] rounded-lg flex flex-col items-center gap-5">
+            {/* Date & Time with Edit Popover */}
             <Badge variant="outline" className="w-full sm:text-lg text-center">
               <p>
                 {`${date} : ${formatTime(time)}`}
@@ -247,6 +248,8 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
                 </PopoverContent>
               </Popover>
             </Badge>
+            {/* Genre & Location*/}
+            <Badge className="w-full sm:text-lg text-center" variant="secondary">{genre} at {location}</Badge>
             <SpinDialogue
               RSVPs={RSVPs}
               rsvp_winner_id={rsvp_winner_id}
