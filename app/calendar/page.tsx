@@ -3,12 +3,13 @@
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
-import { useContext, useEffect } from "react";
+import { Suspense, useContext, useEffect } from "react";
 import { EventContext } from "@/lib/EventProvider";
 import EventFetch from "@/lib/Events";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const localizer = momentLocalizer(moment);
 
@@ -20,11 +21,23 @@ function formatDate(date: string, time: string) {
 }
 
 export default function CalendarPage() {
+  return (
+    <Suspense >
+      <CalendarPageInner />
+    </Suspense>
+  )
+}
+
+function CalendarPageInner() {
   const { events, setEvents } = useContext(EventContext);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const formattedEvents = events.map((event) => ({
     title: event.title,
     start: formatDate(event.date, event.time),
     end: new Date(formatDate(event.date, event.time).getTime() + 3 * 60 * 60 * 1000),
+    id: event.id,
   }));
 
   console.log("Events: ", events);
@@ -55,6 +68,11 @@ export default function CalendarPage() {
         views={[Views.MONTH, Views.WEEK, Views.DAY, Views.AGENDA]}
         popup
         style={{ height: "100%" }}
+        onSelectEvent={(event) => {
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.set("event", event.id?.toString() || "");
+          router.push(`/?${newSearchParams.toString()}`);
+        }}
       />
       {/* Floating back button */}
       <div className="fixed bottom-4 left-4 bg-background">

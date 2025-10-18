@@ -58,7 +58,7 @@ function Home() {
       }
     }
     fetchEvents();
-  }, [refresh]);
+  }, [refresh, setEvents]);
 
   return (
     <userContext.Provider value={{ user, setUser }}>
