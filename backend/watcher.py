@@ -7,7 +7,7 @@ import requests
 # psycopg using dict row factory
 from .SQL_UTIL.db import POOL
 from .SQL_UTIL.operations import (
-    get_events_within_the_hour,
+    get_events_within_the_half_hour,
     get_rsvps_for_event,
     insert_event_winner,
 )
@@ -28,19 +28,19 @@ def main():
         date_string = ""
         format_string = "%m/%d/%Y"
 
-        # Select events within an hour of now, that are not in the event_winners table
+        # Select events within a half an hour of now, that are not in the event_winners table
         # Then, pick a winner for each event, and insert into event_winners table
         # Finally, send a radarr request to add the movie to the library
 
         with POOL.connection() as conn:
             with conn.cursor() as cur:
-                _ = cur.execute(get_events_within_the_hour)
+                _ = cur.execute(get_events_within_the_half_hour)
                 events = cur.fetchall()
                 print(
-                    f"[watcher] Found {len(events)} events within the hour that need processing"
+                    f"[watcher] Found {len(events)} events within the half hour that need processing"
                 )
                 for event in events:
-                    print(f"[watcher] Event found within the hour: {event}")
+                    print(f"[watcher] Event found within the half hour: {event}")
                     # Need to pick an event winner
                     # First, get the RSVPs for the event
                     event_id = event["id"]
