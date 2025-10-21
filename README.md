@@ -6,44 +6,66 @@ Tiny full‑stack app for planning movie nights.
 - **Backend:** FastAPI (uvicorn) + psycopg + Postgres 16
 - **Proxy:** Next rewrites `/api/*` → backend (local or container), controlled by envs
 
-## Quick Start
+## Quick Start (Updated)
 
-### Option A — Docker (recommended)
+### Docker (recommended)
+
+1. Create a `.env` file in the repo root with your Radarr credentials:
+
 ```bash
-# from repo root
-docker compose -f dockercompose.yml up -d
-
-# URLs
-# Frontend → http://localhost:3000
-# Backend  → http://localhost:8000
-# Postgres → localhost:5432 (db: moviepicker / user: moviepicker / pass: moviepickerpass)
+MOVIE_PICKER_RADARR_URL=http://radarr:7878
+MOVIE_PICKER_RADARR_API_KEY=YOUR_RADARR_API_KEY
 ```
-Compose spins up Postgres, runs the schema initializer, then starts API and UI.
 
-### Option B — Local Dev
+2. Start everything:
+```bash
+docker compose -f dockercompose.yml up -d
+```
+
+**URLs**
+- Frontend → http://localhost:3000  
+- Backend  → http://localhost:8000  
+- Postgres → localhost:5432 (`moviepicker` / `moviepickerpass`)
+
+Compose runs Postgres, initializes the schema, and launches the backend, watcher, and frontend.  
+The watcher requires the two Radarr variables.
+
+---
+
+### Local Dev
+
 **Backend**
 ```bash
 pip install -r backend/requirements.txt
 export MOVIE_PICKER_DB_URL="postgresql://moviepicker:moviepickerpass@localhost:5432/moviepicker"
-uvicorn backend.api:app --host 0.0.0.0 --port 8000 --reload
+uvicorn backend.api:app --reload
+```
+
+(Optional)
+```bash
+export MOVIE_PICKER_RADARR_URL="http://localhost:7878"
+export MOVIE_PICKER_RADARR_API_KEY="YOUR_KEY"
+python -m backend.watcher
 ```
 
 **Frontend**
 ```bash
 npm install
-# Set LOCAL_DEV so Next proxies to http://localhost:8000
-# macOS/Linux
 LOCAL_DEV=TRUE npm run dev
-# Windows (cmd)
-set LOCAL_DEV=TRUE && npm run dev
 ```
 
-## Environment
+---
 
-- `MOVIE_PICKER_DB_URL` – Postgres connection string (backend uses a psycopg pool).
-  - Example (Docker network): `postgresql://moviepicker:moviepickerpass@postgres:5432/moviepicker`
-- `MOVIE_PICKER_API_URL` – Backend base URL for the proxy in production/containers (e.g. `http://backend:8000`).
-- `LOCAL_DEV` – If set, Next uses `http://localhost:8000` as the proxy target. If **not** set, it uses `MOVIE_PICKER_API_URL`.
+### Environment Variables
+
+| Variable | Description |
+|-----------|--------------|
+| MOVIE_PICKER_DB_URL | Postgres connection string |
+| MOVIE_PICKER_API_URL | Backend URL for proxy (default `http://backend:8000`) |
+| LOCAL_DEV | If set, proxies to localhost:8000 |
+| MOVIE_PICKER_RADARR_URL | Radarr base URL |
+| MOVIE_PICKER_RADARR_API_KEY | Radarr API key |
+
 
 ## API (FastAPI, base `/api`)
 
