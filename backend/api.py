@@ -237,3 +237,48 @@ def get_event_winner(event_id: int):
                 )
             rsvp_winner_id = winner["rsvp_id"] if winner else None
     return JSONResponse(content={"rsvp_winner_id": rsvp_winner_id})
+
+
+@app.get("/api/movies/{movie}")
+def get_movies(movie: str):
+    import os
+    import requests
+
+    # Grab Radarr URL and API key from environment variables
+    radarr_url = os.environ.get("MOVIE_PICKER_RADARR_URL")
+    radarr_api_key = os.environ.get("MOVIE_PICKER_RADARR_API_KEY")
+
+    if not radarr_url or not radarr_api_key:
+        print("[get_movies] Radarr URL or API key not set in environment variables")
+        print(f"[get_movies] Radarr URL: {radarr_url}")
+        print(f"[get_movies] Radarr API Key: {radarr_api_key}")
+
+    # Build and send the Radarr lookup request for movie data
+    radarr_lookup_endpoint = f"{radarr_url}/api/v3/movie/lookup"
+    params = {
+        "term": movie,
+        "apikey": radarr_api_key,
+    }
+    print(f"[get_movies] Radarr looking up movie: {params['term']}")
+    lookup_response = requests.get(
+        radarr_lookup_endpoint,
+        params=params,
+    )
+
+    if not lookup_response.ok:
+        print(
+            f"[get_movies] Radarr lookup failed: {lookup_response.status_code} - {lookup_response.text}"
+        )
+
+    results = lookup_response.json()
+    print(
+        f"[get_movies] Radarr lookup response: {lookup_response.status_code} - {results[0] if results else 'No results found'}"
+    )
+
+    if not results:
+        print("[get_movies] No results found in Radarr lookup")
+        return JSONResponse(content={"movies": []})
+
+    # limit to 5 results
+    res = [movie_obj["title"] for movie_obj in results[:5]] if results else []
+    return JSONResponse(content={"movies": res})
