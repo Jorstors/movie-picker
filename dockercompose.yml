@@ -12,6 +12,7 @@ services:
       POSTGRES_USER: moviepicker
       POSTGRES_PASSWORD: moviepickerpass
       POSTGRES_DB: moviepicker
+      TZ: America/Los_Angeles
     volumes:
       - moviepicker_pgdata:/var/lib/postgresql/data
     healthcheck:

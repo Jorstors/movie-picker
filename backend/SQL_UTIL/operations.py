@@ -74,11 +74,11 @@ DELETE FROM rsvps
 WHERE id = %s
 """
 
-get_events_within_the_hour = """
+get_events_within_the_half_hour = """
 SELECT *
 FROM events
 WHERE TO_TIMESTAMP(date || ' ' || time, 'MM/DD/YYYY HH24:MI')
-BETWEEN (NOW() AT TIME ZONE 'America/Los_Angeles') AND (NOW() AT TIME ZONE 'America/Los_Angeles' + INTERVAL '1 hour')
+BETWEEN NOW() AND (NOW() + INTERVAL '1 hour')
 AND id NOT IN (SELECT event_id FROM event_winners);
 """
 
