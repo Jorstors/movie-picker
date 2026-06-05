@@ -100,12 +100,15 @@ function AddEditMovies({ id, onSuccess }: { id?: number, onSuccess: () => void }
           </Button>
         </PopoverTrigger>
         <PopoverContent
+          sideOffset={8}
+          align="center"
+          className="max-sm:w-[90vw] max-sm:max-w-[350px]"
           onKeyDown={(e) => {
             if (e.key === "Enter" && !disabled) {
               handleSubmit();
             }
           }}>
-          <div className="w-full min-h-fit p-5 flex flex-col gap-5 items-center content-center">
+          <div className="w-full min-h-fit p-4 sm:p-5 flex flex-col gap-4 sm:gap-5 items-center content-center">
             <Popover open={comboBoxOpen} onOpenChange={setComboBoxOpen}>
               <PopoverTrigger asChild>
                 <Button
@@ -122,7 +125,7 @@ function AddEditMovies({ id, onSuccess }: { id?: number, onSuccess: () => void }
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
+              <PopoverContent className="w-[200px] sm:w-[200px] max-sm:w-[80vw] p-0">
                 <Command>
                   <CommandInput placeholder="Search movie..." className="h-9"
                     onValueChange={(text) => {

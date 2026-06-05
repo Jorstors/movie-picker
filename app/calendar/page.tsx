@@ -58,7 +58,7 @@ function CalendarPageInner() {
   }, [setEvents]);
 
   return (
-    <div className="w-screen h-screen p-4 bg-white text-neutral-600">
+    <div className="w-screen h-dvh p-2 sm:p-4 bg-white text-neutral-600">
       <Calendar
         localizer={localizer}
         events={formattedEvents}

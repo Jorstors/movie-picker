@@ -8,7 +8,7 @@ const tabs = [
 
 function TabBar() {
   return (
-    <div className="min-w-[30vw] h-20 gap-3 flex items-center justify-between">
+    <div className="w-full min-w-[30vw] h-20 gap-3 flex items-center justify-center">
       {tabs.map((tab) => (
         <Link
           key={tab.name}

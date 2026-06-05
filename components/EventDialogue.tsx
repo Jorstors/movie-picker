@@ -197,26 +197,26 @@ function EventDialogueInner({ id, title, genre, date, time, location, author, on
         open={open}
         onOpenChange={handleOpenChange}
       >
-        <DialogTrigger>
-          <div className="sm:relative flex flex-col items-start justify-start gap-2 p-5 border-ring border-2 w-full sm:w-[70vw] md:w-[45vw] min-h-60 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl">
-            <h1 className="text-xl font-bold">{title}</h1>
-            <Badge className="text-sm" variant="secondary">{genre}</Badge>
-            <p className="sm:absolute top-0 right-0 m-5 flex flex-col items-center gap-2 text-start">
-              <CalendarIcon className="self-start sm:self-end" />
+        <DialogTrigger asChild>
+          <div className="sm:relative flex flex-col items-start justify-start gap-3 p-4 sm:p-5 border-ring border-2 w-full sm:w-[500px] md:w-[550px] lg:w-[600px] min-h-60 hover:cursor-pointer bg-card hover:bg-card-foreground/10 rounded-lg shadow-xl overflow-hidden">
+            <h1 className="text-lg sm:text-xl font-bold break-words w-full">{title}</h1>
+            <Badge className="text-xs sm:text-sm" variant="secondary">{genre}</Badge>
+            <p className="sm:absolute top-0 right-0 m-3 sm:m-5 flex flex-row sm:flex-col items-center gap-2 text-start text-xs sm:text-sm">
+              <CalendarIcon className="size-4 sm:size-5 self-start sm:self-end" />
               {date} : {formatTime(time)}
             </p>
-            <p className="sm:absolute bottom-0 left-0 m-5 flex flex-col items-center gap-2 text-start">
-              <HomeIcon className="self-start" />
+            <p className="sm:absolute bottom-0 left-0 m-3 sm:m-5 flex flex-row sm:flex-col items-center gap-2 text-start text-xs sm:text-sm">
+              <HomeIcon className="size-4 sm:size-5 self-start" />
               {location}
             </p>
-            <Badge variant="default" className="sm:absolute bottom-0 right-0 p-2 m-5 text-sm">{author}</Badge>
+            <Badge variant="default" className="sm:absolute bottom-0 right-0 p-1.5 sm:p-2 m-3 sm:m-5 text-xs sm:text-sm">{author}</Badge>
           </div>
         </DialogTrigger>
-        <DialogContent className="overflow-y-scroll scrollbar-hidden">
+        <DialogContent className="overflow-y-scroll scrollbar-hidden max-sm:max-w-[calc(100%-0.5rem)] max-sm:max-h-[90dvh] max-sm:p-4">
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">{title}</DialogTitle>
           </DialogHeader>
-          <div className="w-full h-[70vh] rounded-lg flex flex-col items-center gap-5">
+          <div className="w-full max-h-[70vh] sm:h-[70vh] rounded-lg flex flex-col items-center gap-4 sm:gap-5">
             {/* Date & Time with Edit Popover */}
             <Badge variant="outline" className="w-full sm:text-lg text-center">
               <p>

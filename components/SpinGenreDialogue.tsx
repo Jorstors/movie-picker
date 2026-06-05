@@ -47,12 +47,12 @@ function SpinGenreDialogue({ genres, setSelectedGenre }: { genres: { id: string,
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="flex flex-col items-center content-center"
+        className="flex flex-col items-center content-center max-sm:max-w-[calc(100%-0.5rem)] max-sm:p-4"
       >
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>
-        <div className="w-full h-fit max-h-screen rounded-lg flex flex-col items-center gap-5">
+        <div className="w-full h-fit max-h-screen rounded-lg flex flex-col items-center gap-4 sm:gap-5">
           <PrizeWheel
             key={JSON.stringify(segments)}
             segments={segments}
