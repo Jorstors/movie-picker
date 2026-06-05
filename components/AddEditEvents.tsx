@@ -116,7 +116,7 @@ function AddEdit({ onSuccess }: { onSuccess: () => void }) {
           </Button>
         </DialogTrigger>
         <DialogContent
-          className="flex flex-col items-center content-center overflow-y-scroll scrollbar-hidden"
+          className="flex flex-col items-center content-center overflow-y-scroll scrollbar-hidden max-sm:max-w-[calc(100%-0.5rem)] max-sm:max-h-[90dvh] max-sm:p-4"
           onKeyDown={(e) => {
             if (e.key === "Enter" && !disabled) {
               handleCreateEvent();
@@ -124,9 +124,9 @@ function AddEdit({ onSuccess }: { onSuccess: () => void }) {
           }}
         >
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Add New Event</DialogTitle>
+            <DialogTitle className="text-xl sm:text-2xl font-bold">Add New Event</DialogTitle>
           </DialogHeader>
-          <div className="w-full h-[70vh] rounded-lg flex flex-col items-center gap-5">
+          <div className="w-full max-h-[70vh] sm:h-[70vh] rounded-lg flex flex-col items-center gap-4 sm:gap-5">
             <p className="mb-2 underline-offset-2 underline">Spin to Select Genre</p>
             <SpinGenreDialogue
               genres={genres}

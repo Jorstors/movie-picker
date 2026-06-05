@@ -63,7 +63,7 @@ function Home() {
   return (
     <userContext.Provider value={{ user, setUser }}>
       <main className="min-h-screen w-full grid place-items-center bg-gradient-to-b from-background to-card" >
-        <div className="px-5 min-w-xs md:w-3xl lg:w-5xl min-h-screen flex flex-col gap-10 items-center content-start py-20">
+        <div className="px-4 sm:px-6 md:px-8 min-w-xs md:w-3xl lg:w-5xl min-h-screen flex flex-col gap-6 sm:gap-10 items-center content-start py-10 sm:py-20">
           {/* User Name Context */}
           {!loading && (
             <PromptName />

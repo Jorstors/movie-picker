@@ -105,12 +105,12 @@ function RSVPCards({ RSVPs, onSuccess }: RSVPCardsProps) {
             )}
             <div
               key={rsvp.event_id}
-              className="w-full min-h-20 flex flex-row gap-2 items-center content-between text-center bg-card-foreground/10 rounded-lg p-3"
+              className="w-full min-h-14 sm:min-h-20 flex flex-row gap-2 items-center content-between text-center bg-card-foreground/10 rounded-lg p-2 sm:p-3"
             >
-              <p>
+              <p className="text-sm sm:text-base truncate">
                 {rsvp.movie}
               </p>
-              <p className="ml-auto italic text-sm">
+              <p className="ml-auto italic text-xs sm:text-sm shrink-0">
                 {rsvp.author}
               </p>
             </div>
