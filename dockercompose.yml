@@ -74,9 +74,10 @@ services:
         condition: service_started
     environment:
       MOVIE_PICKER_API_URL: http://backend:8000
+      PORT: 5173
     # Port forwarding to host machine for access
     ports:
-      - "3000:3000"
+      - "5173:5173"
 
 volumes:
   moviepicker_pgdata:
