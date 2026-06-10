@@ -14,7 +14,7 @@ services:
       POSTGRES_DB: moviepicker
       TZ: America/Los_Angeles
     volumes:
-      - moviepicker_pgdata:/var/lib/postgresql/data
+      - ${MOVIE_PICKER_VOLUME_PATH:-moviepicker_pgdata:/var/lib/postgresql/data}
     healthcheck:
       test:
         ["CMD-SHELL", "pg_isready -U moviepicker -d moviepicker -h localhost"]
