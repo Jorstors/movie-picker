@@ -2,8 +2,8 @@
 
 Tiny full‑stack app for planning movie nights.
 
-- **Frontend:** Next.js 15 (App Router) + React 19 + Tailwind CSS v4 + shadcn/ui
-- **Backend:** FastAPI (uvicorn) + psycopg + Postgres 16
+- **Frontend:** Next.js + React + Tailwind CSS + shadcn/ui
+- **Backend:** FastAPI (uvicorn) + psycopg + Postgres
 - **Proxy:** Next rewrites `/api/*` → backend (local or container), controlled by envs
 
 ## Quick Start (Updated)
